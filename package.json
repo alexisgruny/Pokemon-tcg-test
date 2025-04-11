@@ -1,0 +1,26 @@
+{
+    "name": "mon-projet",
+    "version": "1.0.0",
+    "description": "Un modèle de projet TypeScript avec Node.js",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "nodemon --watch src --exec ts-node src/index.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/express": "^5.0.1",
+        "@types/node": "^20.0.0",
+        "nodemon": "^2.0.0",
+        "ts-node": "^10.0.0",
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "ejs": "^3.1.10",
+        "express": "^5.1.0"
+    }
+}
