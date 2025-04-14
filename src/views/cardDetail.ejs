@@ -8,13 +8,16 @@
     </head>
 <body>
     <h1><%= card.name %></h1>
-    <div class="card-detail">
+    <div class="card-detail <%= card.types %>">
         <img src="<%= card.image %>/high.webp" alt="<%= card.name %>" width="300">
             <p><strong>#</strong> <%= card.localId %></p>
             <p> <%= card.description %></p>
         <img src="<%= card.set.logo %>.webp" alt="<%= card.set.name %>" width="100">
         <p> <%= card.illustrator %></p>
+        <% if (card.rarity) { %>
+            <p class="<%= card.rarity.toLowerCase().replace(/ /g, '-') %>">Rareté : <%= card.rarity %></p>
+        <% } %>
     </div>
-    <a href="/cards">Retour à la liste des cartes</a>
+    <a href="/cards/set/<%= setId %>">Retour à la liste des cartes</a>
 </body>
 </html>

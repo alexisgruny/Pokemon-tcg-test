@@ -18,7 +18,8 @@ router.get('/set/:setId', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const card = await getCardById(req.params.id); // Récupère les détails de la carte
-        res.render('cardDetail', { title: `Détail de ${card.name}`, card });
+        const setId = card.set.id; // Récupère l'ID du set de la carte
+        res.render('cardDetail', { title: `Détail de ${card.name}`, card , setId});
     } catch (error) {
         res.status(500).send('Erreur lors de la récupération des détails de la carte.');
     }

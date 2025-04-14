@@ -2,7 +2,6 @@ import express from 'express';
 import path from 'path';
 import indexRoutes from './routes/main';
 import userRoutes from './routes/users';
-import productRoutes from './routes/products';
 import authRoutes from './routes/auth';
 import cardRoutes from './routes/cards';
 import cardSets from './routes/sets';
@@ -21,7 +20,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/', indexRoutes);
 app.use('/users', userRoutes);
-app.use('/products', productRoutes);
 app.use('/auth', authRoutes);
 app.use('/cards', cardRoutes);
 app.use('/sets', cardSets);
