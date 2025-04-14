@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><%= title %></title>
+        <link rel="stylesheet" href="/styles.css"> 
+    </head>
+<body>
+    <h1><%= card.name %></h1>
+    <div class="card-detail">
+        <img src="<%= card.image %>/high.webp" alt="<%= card.name %>" width="300">
+            <p><strong>#</strong> <%= card.localId %></p>
+            <p> <%= card.description %></p>
+        <img src="<%= card.set.logo %>.webp" alt="<%= card.set.name %>" width="100">
+        <p> <%= card.illustrator %></p>
+    </div>
+    <a href="/cards">Retour à la liste des cartes</a>
+</body>
+</html>
