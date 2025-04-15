@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #a2a2a8;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #333;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap; /* Permet de passer à la ligne si nécessaire */
+    justify-content: center; /* Centre les cartes horizontalement */
+    gap: 20px; /* Espacement entre les cartes */
+}
+
+li {
+    flex: 0 1 calc(16.66% - 20px); 
+    box-sizing: border-box;
+    text-align: center;
+    padding: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+li:hover {
+    transform: scale(1.05); /* Zoom léger au survol */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+p {
+    margin: 10px 0 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.content {
+    flex: 1; /* Permet au contenu de s'étendre pour pousser le footer en bas */
+}
+
+.card-detail {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #fff;
+}
+
+.card-detail.Grass {
+    background: linear-gradient(45deg, rgba(213,223,40,0.8),rgba(160,201,59,0.8));                                        
+}
+
+.card-detail.Fire {
+    background: linear-gradient(45deg, rgba(234,95,51,0.8),rgba(246,153,64,0.8));  
+}
+
+.card-detail img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.card-detail p {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #555;
+}
+
+.card-detail p strong {
+    color: #222;
+}
+
+a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+

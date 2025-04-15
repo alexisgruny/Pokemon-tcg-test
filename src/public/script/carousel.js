@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const offset = index - currentIndex;
 
             // Applique une transformation en fonction de la position relative
-            if (offset === 0) {
+            if (offset === 2) {
                 item.style.transform = 'translateZ(50px) scale(1)';
-            } else if (offset === 1 || offset === -items.length + 1) {
+            } else if (offset === 2 || offset === -items.length + 1) {
                 item.style.transform = 'translateZ(0px) scale(0.9)';
             } else {
                 item.style.transform = 'translateZ(-50px) scale(0.8)';

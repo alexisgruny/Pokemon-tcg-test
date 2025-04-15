@@ -1,0 +1,58 @@
+/* Carrousel */
+.carousel {
+    width: 95%; /* Prend toute la largeur de la page */
+    overflow: hidden;
+    position: relative;
+    margin: 20px auto; /* Ajuste la marge pour centrer verticalement */
+    perspective: 1000px; /* Ajoute une perspective pour l'effet de profondeur */
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+    transform-style: preserve-3d; /* Active la 3D */
+    width: 100%; /* Prend toute la largeur */
+}
+
+.carousel-item {
+    flex: 0 0 20%; /* Chaque carte occupe 1/5 de la largeur */
+    text-align: center;
+    transform: scale(0.8); /* Réduit légèrement la taille par défaut */
+    transition: transform 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    z-index: 1; /* Par défaut, les cartes sont en arrière-plan */
+}
+
+.carousel-item_active {
+    transform: scale(1); /* Zoom sur la carte centrale */
+    z-index: 3; /* Met la carte centrale au-dessus des autres */
+}
+
+.carousel-item img {
+    max-width: 90%; /* Ajuste la taille des images pour qu'elles ne débordent pas */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-item p {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.carousel-item img:hover{
+    transform: scale(1.1); /* Zoom léger au survol */
+}
+
+.carousel-logo {
+    display: block;
+    margin: 20px auto;
+    max-width: 200px;
+    height: auto;
+    transition: transform 0.2s ease-in-out;
+}
+
+.carousel-logo:hover {
+    transform: scale(1.1);
+}
