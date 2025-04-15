@@ -3,7 +3,6 @@ import axios from 'axios';
 // Base URL de l'API TCGdex
 const BASE_URL = 'https://api.tcgdex.net/v2/en';
 
-// Fonction pour récupérer toutes les cartes du set avec id = A1
 export const getAllSets = async () => {
     try {
         const response = await axios.get(`${BASE_URL}/series/tcgp`);

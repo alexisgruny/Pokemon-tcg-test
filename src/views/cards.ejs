@@ -7,13 +7,15 @@
         <link rel="stylesheet" href="/styles.css"> 
     </head>
 <body>
+
+    <%- include('partials/navbar') %>
+    
     <h1><%= title %></h1>
     <ul>
         <% cards.forEach(card => { %>
             <li>
                 <a href="/cards/<%= card.id %>"> <!-- Lien vers la page de détails -->
-                    <img src="<%= card.image %>/high.webp" alt="<%= card.name %>" width="100">
-                    <p><%= card.name %></p>
+                    <img src="<%= card.image %>/high.webp" alt="<%= card.name %>">
                 </a>
             </li>
         <% }) %>

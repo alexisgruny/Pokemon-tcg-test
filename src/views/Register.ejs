@@ -6,6 +6,8 @@
     <title><%= title %></title>
 </head>
 <body>
+    <%- include('partials/navbar') %>
+    
     <h1>Formulaire d'inscription</h1>
     <form action="/auth/register" method="POST">
         <label for="username">Nom d'utilisateur :</label>
