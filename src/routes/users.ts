@@ -1,9 +1,12 @@
 import { Router } from 'express';
+import { createUser, getAllUsers } from '../controllers/usersController';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.render('index'); // Rend la vue "index.ejs"
-});
+// Route pour créer un utilisateur
+router.post('/register', createUser);
+
+// Route pour récupérer tous les utilisateurs
+router.get('/', getAllUsers);
 
 export default router;
