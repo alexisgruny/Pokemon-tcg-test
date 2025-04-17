@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Applique une transformation en fonction de la position relative
             if (offset === 2) {
                 item.style.transform = 'translateZ(50px) scale(1)';
-            } else if (offset === 2 || offset === -items.length + 1) {
+            } else if (offset === 1 || offset === 3) {
                 item.style.transform = 'translateZ(0px) scale(0.9)';
             } else {
                 item.style.transform = 'translateZ(-50px) scale(0.8)';
@@ -27,6 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialise le carrousel
     updateCarousel();
 
-    // Change de carte toutes les 3 secondes
-    setInterval(moveCarousel, 3000);
+    // Change de carte toutes les 2 secondes
+    setInterval(moveCarousel, 2000);
 });
