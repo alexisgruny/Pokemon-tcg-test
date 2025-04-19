@@ -39,7 +39,6 @@ app.use('/users', userRoutes);  // Route pour les utilisateurs
 app.use('/auth', authRoutes); // Route pour l'authentification
 app.use('/cards', cardRoutes);  // Route pour les cartes
 app.use('/sets', cardSets); // Route pour les sets de cartes
-app.use('/users', userRoutes);  
 
 app.listen(3000, () => {
     console.log('Serveur démarré sur http://localhost:3000');

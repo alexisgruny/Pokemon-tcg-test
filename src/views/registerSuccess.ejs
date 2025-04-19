@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/footer.css">   
     <title><%= title %></title>
 </head>
 <body>
@@ -12,5 +15,7 @@
     <h1>Inscription réussie</h1>
     <p>Bienvenue, <strong><%= username %></strong> ! Votre inscription a été réussie.</p>
     <a href="/">Retour à l'accueil</a>
+
+    <%- include('partials/footer') %>
 </body>
 </html>
