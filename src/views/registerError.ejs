@@ -16,21 +16,13 @@
 
     <%- include('partials/navbar') %>
 
-        <h1>
-            <%= title %>
-        </h1>
-        <ul>
-            <% cards.forEach(card=> { %>
-                <li>
-                    <a href="/cards/<%= card.id %>"> <!-- Lien vers la page de détails -->
-                        <img src="<%= card.image %>/high.webp" alt="<%= card.name %>">
-                    </a>
-                </li>
-                <% }) %>
-        </ul>
+        <h1>Erreur lors de l'inscription</h1>
+        <p style="color: red;">
+            <%= errorMessage %>
+        </p>
+        <a href="/auth/registerLogin" class="btn">Réessayer</a>
 
         <%- include('partials/footer') %>
-
 </body>
 
 </html>

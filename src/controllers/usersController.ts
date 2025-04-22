@@ -2,29 +2,36 @@ import { Request, Response } from 'express';
 import User from '../model/user';
 import bcrypt from 'bcrypt';
 
-// Créer un utilisateur
 export const createUser = async (req: Request, res: Response): Promise<void> => {
     const { username, email, password } = req.body;
 
     try {
-        // Hacher le mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Créer l'utilisateur
         const user = await User.create({
             username,
             email,
             password: hashedPassword,
         });
 
-        res.status(201).json({ message: 'Utilisateur créé avec succès', user });
-    } catch (error) {
+        res.render('registerSuccess', { title: 'Inscription réussie', username: user.username });
+    } catch (error: any) {
         console.error('Erreur lors de la création de l\'utilisateur :', error);
-        res.status(500).json({ error: 'Erreur lors de la création de l\'utilisateur.' });
+
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.render('registerError', { 
+                title: 'Erreur d\'inscription', 
+                errorMessage: 'Le nom d\'utilisateur ou l\'email existe déjà.' 
+            });
+        }
+
+        res.render('registerError', { 
+            title: 'Erreur d\'inscription', 
+            errorMessage: 'Une erreur est survenue lors de la création de votre compte. Veuillez réessayer.' 
+        });
     }
 };
 
-// Récupérer tous les utilisateurs
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
     try {
         const users = await User.findAll();

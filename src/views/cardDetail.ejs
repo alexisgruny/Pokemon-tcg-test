@@ -1,31 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><%= title %></title>
-        <link rel="stylesheet" href="/styles/styles.css"> 
-        <link rel="stylesheet" href="/styles/navbar.css">
-        <link rel="stylesheet" href="/styles/footer.css">
-    </head>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+</head>
+
 <body>
 
     <%- include('partials/navbar') %>
 
-    <div class="card-detail <%= card.types %>">
-        <h1><%= card.name %></h1>
-        <img src="<%= card.image %>/high.webp" alt="<%= card.name %>" width="300">
-            <p><strong>#</strong> <%= card.localId %></p>
-            <p> <%= card.description %></p>
-        <img src="<%= card.set.logo %>.webp" alt="<%= card.set.name %>" width="100">
-        <p> <%= card.illustrator %></p>
-        <% if (card.rarity) { %>
-            <p class="<%= card.rarity %>">Rareté : <%= card.rarity %></p>
-        <% } %>
-    </div>
-    <a href="/cards/set/<%= setId %>">Retour à la liste des cartes</a>
+        <div class="card-detail <%= card.types %>">
+            <h1>
+                <%= card.name %>
+            </h1>
+            <img src="<%= card.image %>/high.webp" alt="<%= card.name %>" width="300">
+            <p><strong>#</strong>
+                <%= card.localId %>
+            </p>
+            <p>
+                <%= card.description %>
+            </p>
+            <img src="<%= card.set.logo %>.webp" alt="<%= card.set.name %>" width="100">
+            <p>
+                <%= card.illustrator %>
+            </p>
+            <% if (card.rarity) { %>
+                <p class="<%= card.rarity %>">Rareté : <%= card.rarity %>
+                </p>
+                <% } %>
+        </div>
+        <a href="/cards/set/<%= setId %>">Retour à la liste des cartes</a>
 
-    <%- include('partials/footer') %>
+        <%- include('partials/footer') %>
 
 </body>
+
 </html>

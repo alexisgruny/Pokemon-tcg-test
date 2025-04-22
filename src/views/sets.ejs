@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Liste des sets</title>
-        <link rel="stylesheet" href="/styles/styles.css">
-        <link rel="stylesheet" href="/styles/navbar.css">
-        <link rel="stylesheet" href="/styles/footer.css">
-    </head>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des sets</title>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+</head>
+
 <body>
 
     <%- include('partials/navbar') %>
 
-    <h1>Liste des sets</h1>
-    <ul>
-        <% sets.forEach(set => { %>
-            <li>
-                <a href="/cards/set/<%= set.id %>"> <!-- Lien vers les cartes du set -->
-                    <img src="<%= set.logo %>.webp" alt="<%= sets.name %>">
-                    <p><%= set.name %></p>
-                </a>
-            </li>
-        <% }) %>
-    </ul>
+        <h1>Liste des sets</h1>
+        <ul>
+            <% sets.forEach(set=> { %>
+                <li>
+                    <a href="/cards/set/<%= set.id %>"> <!-- Lien vers les cartes du set -->
+                        <img src="<%= set.logo %>.webp" alt="<%= sets.name %>">
+                        <p>
+                            <%= set.name %>
+                        </p>
+                    </a>
+                </li>
+                <% }) %>
+        </ul>
 
-    <%- include('partials/footer') %>
+        <%- include('partials/footer') %>
 
 </body>
+
 </html>

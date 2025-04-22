@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><%= title %></title>
-        <link rel="stylesheet" href="styles/styles.css">
-        <link rel="stylesheet" href="styles/carousel.css">
-        <link rel="stylesheet" href="styles/navbar.css">
-        <link rel="stylesheet" href="styles/footer.css">
-    </head>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/carousel.css">
+    <link rel="stylesheet" href="styles/navbar.css">
+    <link rel="stylesheet" href="styles/footer.css">
+</head>
+
 <body>
 
     <%- include('partials/navbar') %>
 
-    <h1>Bienvenue sur le site Pokémon TCG</h1>
-    <img src="<%= set.logo %>.webp" alt="Logo du set <%= set.name %>" class="carousel-logo">
+        <h1>Bienvenue sur le site Pokémon TCG</h1>
+        <img src="<%= set.logo %>.webp" alt="Logo du set <%= set.name %>" class="carousel-logo">
 
-    <!-- Carrousel -->
-    <div class="carousel">
-        <div class="carousel-track">
-            <% cards.forEach((card, index) => { %>
-                <div class="carousel-item" data-pos="<%= index - Math.floor(cards.length / 2) %>">
-                    <a href="/cards/<%= card.id %>">
-                        <img src="<%= card.image %>/high.webp" alt="<%= card.name %>">
-                    </a>
-                </div>
-            <% }) %>
+        <!-- Carrousel -->
+        <div class="carousel">
+            <div class="carousel-track">
+                <% cards.forEach((card, index)=> { %>
+                    <div class="carousel-item" data-pos="<%= index - Math.floor(cards.length / 2) %>">
+                        <a href="/cards/<%= card.id %>">
+                            <img src="<%= card.image %>/high.webp" alt="<%= card.name %>">
+                        </a>
+                    </div>
+                    <% }) %>
+            </div>
         </div>
-    </div>
 
-    <%- include('partials/footer') %>
+        <%- include('partials/footer') %>
 
-    <script src="script/carousel.js"></script>
+            <script src="script/carousel.js"></script>
 </body>
+
 </html>

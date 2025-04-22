@@ -1,7 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/db';
 
-// Définition des attributs de l'utilisateur
 interface UserAttributes {
     id: number;
     username: string;
@@ -11,22 +10,18 @@ interface UserAttributes {
     updatedAt?: Date;
 }
 
-// Définition des attributs optionnels pour la création
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
-// Définition du modèle User
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     public id!: number;
     public username!: string;
     public email!: string;
     public password!: string;
 
-    // Champs automatiques
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 }
 
-// Initialisation du modèle User
 User.init(
     {
         id: {
@@ -38,21 +33,31 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
+            validate: {
+                is: /^[a-zA-Z0-9_]+$/,
+                len: [3, 20],
+            },
         },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
+            validate: {
+                isEmail: true,
+            },
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
+            validate: {
+                len: [8, 100],
+            },
         },
     },
     {
-        sequelize, // Instance Sequelize
+        sequelize,
         tableName: 'users',
-        timestamps: true, // Ajoute createdAt et updatedAt
+        timestamps: true,
     }
 );
 

@@ -27,6 +27,7 @@
 
 .footer-links a {
     color: #f0a500;
+    font-weight: bold;
     text-decoration: none;
     transition: color 0.3s ease;
 }
