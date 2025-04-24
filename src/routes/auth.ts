@@ -48,7 +48,11 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        res.render('loginSuccess', { title: 'Connexion réussie', username: user.username });
+        // Stocker l'utilisateur dans la session
+        req.session.user = user;
+
+        // Rediriger vers la page d'accueil après connexion
+        res.redirect('/');
     } catch (error) {
         console.error('Erreur lors de la connexion :', error);
 
@@ -57,6 +61,16 @@ router.post('/login', async (req, res) => {
             errorMessage: 'Une erreur est survenue. Veuillez réessayer.'
         });
     }
+});
+
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Erreur lors de la déconnexion :', err);
+            return res.redirect('/');
+        }
+        res.redirect('/auth/login');
+    });
 });
 
 export default router;

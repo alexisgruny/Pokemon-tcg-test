@@ -26,6 +26,11 @@ app.use(session({
     cookie: { secure: false } // Mettre `true` en production avec HTTPS
 }));
 
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
+});
+
 // Test de connexion à la base de données
 sequelize.authenticate()
     .then(() => console.log('Connexion à la base de données PostgreSQL réussie.'))

@@ -2,6 +2,12 @@
     <ul>
         <li><a href="/">Accueil</a></li>
         <li><a href="/sets">Cartes</a></li>
-        <li><a href="/auth/register">Inscription/connexion</a></li>
+        <% if (user) { %>
+            <li><a href="#">Bienvenue, <%= user.username %></a></li>
+            <li><a href="/auth/logout">Déconnexion</a></li>
+        <% } else { %>
+            <li><a href="/auth/login">Connexion</a></li>
+            <li><a href="/auth/register">Inscription</a></li>
+        <% } %>
     </ul>
 </nav>
