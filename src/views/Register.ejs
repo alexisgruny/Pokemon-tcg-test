@@ -29,11 +29,19 @@
             <input type="password" id="password" name="password" required>
             <br><br>
 
+            <label for="inGameName">Nom en jeu :</label>
+            <input type="text" id="inGameName" name="inGameName" required>
+            <br><br>
+
+            <label for="friendCode">Code ami :</label>
+            <input type="text" id="friendCode" name="friendCode" maxlength="14" required>
+            <br><br>
+
             <button type="submit">S'inscrire</button>
         </form>
 
         <%- include('partials/footer') %>
-
+        <script src="/scripts/friendCode.js"></script>
 </body>
 
 </html>

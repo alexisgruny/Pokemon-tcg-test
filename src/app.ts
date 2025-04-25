@@ -7,7 +7,8 @@ import indexRoutes from './routes/main';
 import userRoutes from './routes/users';
 import authRoutes from './routes/auth';
 import cardRoutes from './routes/cards';
-import cardSets from './routes/sets';
+import cardSetsRoutes from './routes/sets';
+import profileRoutes from './routes/profile';
 import sequelize from './config/db';
 
 dotenv.config();
@@ -50,7 +51,8 @@ app.use('/', indexRoutes);
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/cards', cardRoutes);
-app.use('/sets', cardSets);
+app.use('/sets', cardSetsRoutes);
+app.use('/profile', profileRoutes);
 
 app.listen(3000, () => {
     console.log('Serveur démarré sur http://localhost:3000');

@@ -15,20 +15,26 @@
 <body>
     <%- include('partials/navbar') %>
         <h1>Connexion</h1>
-        <form action="/auth/login" method="POST">
-            <label for="email">Email :</label>
-            <input type="email" id="email" name="email" required>
 
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" required>
+        <% if (typeof errorMessage !=='undefined' ) { %>
+            <p style="color: red;">
+                <%= errorMessage %>
+            </p>
+            <% } %>
+                <form action="/auth/login" method="POST">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" required>
 
-            <button type="submit">Se connecter</button>
-        </form>
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" required>
 
-        <p>Pas encore de compte ? <a href="/auth/registerLogin">Inscrivez-vous ici</a></p>
+                    <button type="submit">Se connecter</button>
+                </form>
 
-        <p>Mot de passe oublié ? <a href="/auth/resetPassword">Réinitialiser le mot de passe</a></p>
+                <p>Pas encore de compte ? <a href="/auth/register">Inscrivez-vous ici</a></p>
 
-        <%- include('partials/footer') %>
+                <p>Mot de passe oublié ? <a href="/auth/resetPassword">Réinitialiser le mot de passe</a></p>
+
+                <%- include('partials/footer') %>
 
 </body>

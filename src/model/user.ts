@@ -6,6 +6,8 @@ interface UserAttributes {
     username: string;
     email: string;
     password: string;
+    friendCode: string;
+    inGameName: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -17,6 +19,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public username!: string;
     public email!: string;
     public password!: string;
+    public friendCode!: string;
+    public inGameName!: string;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -51,6 +55,21 @@ User.init(
             allowNull: false,
             validate: {
                 len: [8, 100],
+            },
+        },
+        friendCode: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                is: /^\d{4}-\d{4}-\d{4}$/,
+            },
+        },
+        inGameName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                len: [3, 20],
             },
         },
     },

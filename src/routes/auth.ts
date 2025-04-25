@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
         if (!user) {
             return res.render('login', {
                 title: 'Connexion',
-                errorMessage: 'Email ou mot de passe incorrect.'
+                errorMessage: 'Email ou mot de passe incorrect.' // Message générique pour éviter de révéler si l'email existe
             });
         }
 
@@ -44,18 +44,16 @@ router.post('/login', async (req, res) => {
         if (!isPasswordValid) {
             return res.render('login', {
                 title: 'Connexion',
-                errorMessage: 'Email ou mot de passe incorrect.'
+                errorMessage: 'Email ou mot de passe incorrect.' // Message spécifique pour un mot de passe incorrect
             });
         }
 
         // Stocker l'utilisateur dans la session
-        req.session.user = user;
+        req.session.user = { id: user.id, username: user.username }; // Stocker uniquement les champs nécessaires
 
         // Rediriger vers la page d'accueil après connexion
         res.redirect('/');
     } catch (error) {
-        console.error('Erreur lors de la connexion :', error);
-
         res.status(500).render('login', {
             title: 'Connexion',
             errorMessage: 'Une erreur est survenue. Veuillez réessayer.'

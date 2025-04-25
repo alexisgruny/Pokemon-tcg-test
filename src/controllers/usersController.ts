@@ -3,7 +3,7 @@ import User from '../model/user';
 import bcrypt from 'bcrypt';
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
-    const { username, email, password } = req.body;
+    const { username, email, password, friendCode, inGameName } = req.body;
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -12,6 +12,8 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
             username,
             email,
             password: hashedPassword,
+            friendCode,
+            inGameName,
         });
 
         res.render('registerSuccess', { title: 'Inscription réussie', username: user.username });
