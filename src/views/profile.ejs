@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/modal.css">
 </head>
 
 <body>
@@ -34,6 +35,19 @@
             </div>
         </div>
 
+         <!-- Modal for deleting account -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <h2>Confirmer la suppression</h2>
+                <p>Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.</p>
+                <div class="modal-buttons">
+                    <form action="/profile/delete" method="POST">
+                        <button type="submit" class="modal-warning" >Oui, supprimer</button>
+                    </form>
+                    <button id="cancelButton">Annuler</button>
+                </div>
+            </div>
+        </div>
         <%- include('partials/footer') %>
-
+            <script src="/scripts/modal.js"></script>
 </body>

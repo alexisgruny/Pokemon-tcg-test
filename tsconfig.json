@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
+    "target": "ES6",                 // ou une autre version de JavaScript
+    "module": "commonjs",            // ou "es6" en fonction de ton environnement
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "baseUrl": "./",
-    "typeRoots": ["./src/types","./node_modules/@types"],
-    "outDir": "./dist"
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",              // Le répertoire de sortie pour les fichiers compilés
+    "rootDir": "./src",              // Le répertoire source de ton code TS
+    "baseUrl": "./",                 // Assure-toi que le chemin est correct
+    "resolveJsonModule": true,
+    "typeRoots": [ "./node_modules/@types", "./types"]  // Si tu utilises des types personnalisés
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
-} 
+  "include": ["src/**/*.ts"],         // Inclut tous les fichiers .ts sous "src"
+  "exclude": ["node_modules", "dist"], // Exclut les répertoires de compilation
+}

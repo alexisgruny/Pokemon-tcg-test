@@ -25,6 +25,19 @@
                     <a href="/cards/<%= card.id %>"> <!-- Lien vers la page de détails -->
                         <img src="<%= card.image %>/high.webp" alt="<%= card.name %>">
                     </a>
+                    <p><strong><%= card.name %></strong></p>
+
+                <!-- Formulaire pour ajouter ou retirer la carte -->
+                <form action="/cards/addOrUpdate" method="POST" style="display: inline;">
+                    <input type="hidden" name="cardId" value="<%= card.id %>">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit">Ajouter</button>
+                </form>
+
+                <form action="/cards/delete" method="POST" style="display: inline;">
+                    <input type="hidden" name="cardId" value="<%= card.id %>">
+                    <button type="submit">Retirer</button>
+                </form>
                 </li>
                 <% }) %>
         </ul>

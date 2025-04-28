@@ -1,74 +1,20 @@
 import { Router } from 'express';
-import bcrypt from 'bcrypt';
-import { createUser } from '../controllers/usersController';
-import User from '../model/user';
+import {
+    showLogin,
+    login,
+    logout,
+    showRegister,
+    register,
+} from '../controllers/authController';
+
 
 const router = Router();
 
-router.get('/register', (req, res) => {
-    res.render('register', { title: 'Inscription' });
-});
-
-router.post('/register', async (req, res) => {
-    try {
-        await createUser(req, res);
-    } catch (error: any) {
-        console.error('Erreur lors de la création de l\'utilisateur :', error);
-
-        if (!res.headersSent) {
-            res.render('registerError', {
-                title: 'Erreur d\'inscription',
-                errorMessage: 'Une erreur est survenue lors de la création de votre compte. Veuillez réessayer.'
-            });
-        }
-    }
-});
-
-router.get('/login', (req, res) => {
-    res.render('login', { title: 'Connexion' });
-});
-
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        const user = await User.findOne({ where: { email } });
-        if (!user) {
-            return res.render('login', {
-                title: 'Connexion',
-                errorMessage: 'Email ou mot de passe incorrect.' // Message générique pour éviter de révéler si l'email existe
-            });
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.render('login', {
-                title: 'Connexion',
-                errorMessage: 'Email ou mot de passe incorrect.' // Message spécifique pour un mot de passe incorrect
-            });
-        }
-
-        // Stocker l'utilisateur dans la session
-        req.session.user = { id: user.id, username: user.username }; // Stocker uniquement les champs nécessaires
-
-        // Rediriger vers la page d'accueil après connexion
-        res.redirect('/');
-    } catch (error) {
-        res.status(500).render('login', {
-            title: 'Connexion',
-            errorMessage: 'Une erreur est survenue. Veuillez réessayer.'
-        });
-    }
-});
-
-router.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Erreur lors de la déconnexion :', err);
-            return res.redirect('/');
-        }
-        res.redirect('/auth/login');
-    });
-});
+// Routes pour l'authentification
+router.get('/login', showLogin);
+router.post('/login', login);
+router.get('/logout', logout);
+router.get('/register', showRegister);
+router.post('/register', register);
 
 export default router;
