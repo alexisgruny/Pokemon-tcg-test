@@ -1,19 +1,25 @@
 import app from './app';
 import sequelize from './config/db';
+import { syncCardsFromApi, syncSetsFromApi} from './services/tcgdexService';
 
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
     try {
-        await sequelize.authenticate();
-        console.log('Connexion à la base de données PostgreSQL réussie.');
+        // Connexion à la base de données
+        await sequelize.authenticate(); 
+        await sequelize.sync({ force: false }); 
+        console.log('Connexion à la base de données réussie.');
 
-        await sequelize.sync({ force: false });
-        console.log('Modèles synchronisés avec la base de données.');
+        // Synchronisation des sets et des cartes depuis l'API
+        await syncSetsFromApi(); 
+        await syncCardsFromApi();  // Synchronise les cartes de chaque set
+        console.log('Toutes les cartes et sets ont été synchronisées avec succès.');
 
+        // Démarre le serveur
         app.listen(PORT, () => {
-            console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
-        });
+            console.log(`Serveur démarré sur http://localhost:${PORT}`);
+        }); 
     } catch (error) {
         console.error('Erreur de connexion ou de synchronisation:', error);
         process.exit(1);

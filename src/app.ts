@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import sessionMiddleware from './config/session';
 import { errorHandler } from './middlewares/errorHandler';
+import './model/association';
 import sequelize from './config/db';
 
 // Routes
@@ -10,6 +11,7 @@ import indexRoutes from './routes/main';
 import authRoutes from './routes/auth';
 import cardRoutes from './routes/cards';
 import profileRoutes from './routes/profile';
+import { Association } from 'sequelize';
 
 dotenv.config();
 const app = express();

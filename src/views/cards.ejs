@@ -13,7 +13,6 @@
 </head>
 
 <body>
-
     <%- include('partials/navbar') %>
 
         <h1>
@@ -22,28 +21,26 @@
         <ul>
             <% cards.forEach(card=> { %>
                 <li>
-                    <a href="/cards/<%= card.id %>"> <!-- Lien vers la page de détails -->
+                    <a href="/cards/<%= card.id %>">
                         <img src="<%= card.image %>/high.webp" alt="<%= card.name %>">
                     </a>
-                    <p><strong><%= card.name %></strong></p>
-
-                <!-- Formulaire pour ajouter ou retirer la carte -->
-                <form action="/cards/addOrUpdate" method="POST" style="display: inline;">
-                    <input type="hidden" name="cardId" value="<%= card.id %>">
-                    <input type="hidden" name="quantity" value="1">
-                    <button type="submit">Ajouter</button>
-                </form>
-
-                <form action="/cards/delete" method="POST" style="display: inline;">
-                    <input type="hidden" name="cardId" value="<%= card.id %>">
-                    <button type="submit">Retirer</button>
-                </form>
+                    <p><strong>
+                            <%= card.name %>
+                        </strong></p>
+                    <div class="card-counter" data-card-id="<%= card.id %>">
+                        <button class="decrement">-</button>
+                        <span class="quantity">
+                            <%= card.quantity || 0 %>
+                        </span>
+                        <button class="increment">+</button>
+                    </div>
                 </li>
                 <% }) %>
         </ul>
 
         <%- include('partials/footer') %>
 
+            <script src="/scripts/cardCounter.js"></script>
 </body>
 
 </html>
