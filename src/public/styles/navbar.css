@@ -1,7 +1,8 @@
-/* Navbar styles */
+/* Navbar */
 .navbar {
-    background-color: #333;
+    background-color: #2a75bb; /* Couleur bleue Pokémon */
     padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .navbar ul {
@@ -17,7 +18,7 @@
 }
 
 .navbar ul li a {
-    color: white;
+    color: #fff;
     font-weight: bold;
     text-decoration: none;
     font-size: 16px;
@@ -25,5 +26,5 @@
 }
 
 .navbar ul li a:hover {
-    color: #f0a500;
+    color: #ffcb05; /* Couleur jaune Pokémon */
 }

@@ -1,15 +1,11 @@
 /* Footer */
 .footer {
-    background-color: #333;
+    background-color: #2a75bb;
     color: #fff;
     padding: 20px 0;
     text-align: center;
-    margin-top: 20px;
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
+    margin-top: auto;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .footer-links {
@@ -21,12 +17,8 @@
     gap: 15px;
 }
 
-.footer-links li {
-    display: inline;
-}
-
 .footer-links a {
-    color: #f0a500;
+    color: #ffcb05;
     font-weight: bold;
     text-decoration: none;
     transition: color 0.3s ease;
