@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+</head>
+
+<body>
+    <%- include('partials/navbar') %>
+
+    <h1><%= title %></h1>
+
+    <!-- Barre de recherche -->
+    <form action="/users/search" method="GET">
+        <input type="text" name="username" placeholder="Rechercher un utilisateur" required>
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <!-- Liste des utilisateurs -->
+    <ul>
+        <% users.forEach(user => { %>
+            <li>
+                <a href="/users/<%= user.username %>"><%= user.username %></a>
+            </li>
+        <% }) %>
+    </ul>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

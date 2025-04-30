@@ -1,17 +1,15 @@
 import { Request, Response } from 'express';
 import OwnedCard from '../model/ownedCard';
 import Card from '../model/card';
+import { isAuthenticated } from 'src/middlewares/authMiddleware';
 
 // Afficher toutes les cartes d'un set spécifique
 export const showCardsBySet = async (req: Request, res: Response) => {
     try {
         const setId = req.params.setId;
 
-        if (!req.session.user) {
-            return res.redirect('/auth/login');
-        }
-
-        const userId = req.session.user.id;
+        // Vérifie si l'utilisateur est connecté
+        const userId = req.session?.user?.id || null;
 
         // 🔄 Récupère les cartes du set depuis ta base avec les infos du set
         const cards: Card[] = await Card.findAll({ where: { setId } });
@@ -33,6 +31,7 @@ export const showCardsBySet = async (req: Request, res: Response) => {
         res.render('cards', {
             title: `Cartes du set ${setId}`,
             cards: cardsWithOwnership,
+            isAuthenticated: req.session.user ? true : false,
         });
     } catch (error) {
         console.error('Erreur lors de la récupération des cartes du set :', error);
@@ -45,8 +44,8 @@ export const showCardDetails = async (req: Request, res: Response) => {
     try {
         const cardId = req.params.id;
 
-        // Inclure les informations du set avec la carte
-        const card = await Card.findByPk(cardId) 
+        // Récupère les détails de la carte depuis la base de données
+        const card = await Card.findByPk(cardId);
 
         if (!card) {
             return res.status(404).send('Carte non trouvée.');
@@ -54,14 +53,20 @@ export const showCardDetails = async (req: Request, res: Response) => {
 
         res.render('cardDetail', {
             title: `Détail de ${card.name}`,
-            card: card.get(),
+            name: card.name,
+            image: card.image,
+            localId: card.localId,
+            description: card.description,
+            setLogo: card.setLogo,
+            illustrator: card.illustrator,
+            rarity: card.rarity,
             setId: card.setId,
-            setName: card.setName, // Accède au nom du set via l'inclusion
-            setLogo: card.setLogo, // Accède au logo du set
+            type: card.type,
+            isAuthenticated: req.session.user ? true : false,
         });
     } catch (error) {
         console.error('Erreur lors de la récupération des détails de la carte :', error);
-        res.status(500).send('Erreur lors de la récupération des détails de la carte.');
+        res.status(500).send('Erreur serveur.');
     }
 };
 

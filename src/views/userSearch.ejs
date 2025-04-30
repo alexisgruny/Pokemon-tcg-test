@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/navbar.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+</head>
+
+<body>
+    <%- include('partials/navbar') %>
+
+    <h1><%= title %></h1>
+
+    <% if (user) { %>
+        <!-- Carte cliquable pour l'utilisateur -->
+        <div class="user-card">
+            <a href="/users/<%= user.username %>" class="user-card-link">
+                <div class="user-card-content">
+                    <h2><%= user.username %></h2>
+                    <% if (user.friendCode) { %>
+                        <p>Code ami : <%= user.friendCode %></p>
+                    <% } %>
+                    <% if (user.inGameName) { %>
+                        <p>Nom en jeu : <%= user.inGameName %></p>
+                    <% } %>
+                </div>
+            </a>
+        </div>
+    <% } else { %>
+        <p>Aucun utilisateur trouvé.</p>
+    <% } %>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

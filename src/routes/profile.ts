@@ -1,20 +1,15 @@
 import { Router } from 'express';
-import {
-    showProfile,
-    showModifyProfile,
-    modifyProfile,
-    showDeleteProfile,
-    deleteProfile,
-} from '../controllers/profileController';
+import { showProfile, showModifyProfile, modifyProfile, showDeleteProfile, deleteProfile, } from '../controllers/profileController';
 import { isAuthenticated } from '../middlewares/authMiddleware';
 
 const router = Router();
 
 // Routes pour le profil
-router.get('/showProfile', isAuthenticated, showProfile);
-router.get('/modify', isAuthenticated, showModifyProfile);
-router.post('/modify', isAuthenticated, modifyProfile);
-router.get('/delete', isAuthenticated, showDeleteProfile);
-router.post('/delete', isAuthenticated, deleteProfile);
+router.use(isAuthenticated);
+router.get('/showProfile', showProfile);
+router.get('/modify', showModifyProfile);
+router.post('/modify', modifyProfile);
+router.get('/delete', showDeleteProfile);
+router.post('/delete', deleteProfile);
 
 export default router;

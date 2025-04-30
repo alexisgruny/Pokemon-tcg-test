@@ -21,12 +21,14 @@
         <ul>
             <% cards.forEach(card=> { %>
                 <li>
+                    <p><strong>
+                        <%= card.name %>
+                    </strong></p>
                     <a href="/cards/<%= card.id %>">
                         <img src="<%= card.image %>/high.webp" alt="<%= card.name %>">
                     </a>
-                    <p><strong>
-                            <%= card.name %>
-                        </strong></p>
+                
+                        <% if (isAuthenticated) { %>
                     <div class="card-counter" data-card-id="<%= card.id %>">
                         <button class="decrement">-</button>
                         <span class="quantity">
@@ -34,6 +36,7 @@
                         </span>
                         <button class="increment">+</button>
                     </div>
+                        <% } %>
                 </li>
                 <% }) %>
         </ul>

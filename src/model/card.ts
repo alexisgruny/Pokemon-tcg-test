@@ -4,11 +4,13 @@ import Set from './set';
 
 class Card extends Model {
    public id!: string;
+   public localId!: string;
    public name!: string;
    public image!: string;
    public type!: string;
    public category!: string;
    public rarity!: string;
+   public description!: string;
    public setId!: string;
    public setName!: string;
    public setLogo!: string;
@@ -25,6 +27,10 @@ Card.init(
         id: {
             type: DataTypes.STRING,
             primaryKey: true,
+            allowNull: false,
+        },
+        localId: {
+            type: DataTypes.STRING, 
             allowNull: false,
         },
         name: {
@@ -45,6 +51,10 @@ Card.init(
         },
         rarity: {
             type: DataTypes.STRING,
+            allowNull: false,
+        },
+        description: {
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         setId: {

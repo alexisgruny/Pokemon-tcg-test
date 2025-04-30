@@ -2,8 +2,9 @@
     <ul>
         <li><a href="/">Accueil</a></li>
         <li><a href="/cards/sets">Cartes</a></li>
-        <% if (user) { %>
-            <li><a href="/profile/showProfile">Bienvenue, <%= user.username %></a></li>
+        <li><a href="/users/list">Utilisateurs</a></li>
+        <% if (isAuthenticated) { %>
+            <li><a href="/profile/showProfile">Mon profil</a></li>
             <li><a href="/auth/logout">Déconnexion</a></li>
         <% } else { %>
             <li><a href="/auth/login">Connexion</a></li>

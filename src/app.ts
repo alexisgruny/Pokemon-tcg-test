@@ -11,7 +11,7 @@ import indexRoutes from './routes/main';
 import authRoutes from './routes/auth';
 import cardRoutes from './routes/cards';
 import profileRoutes from './routes/profile';
-import { Association } from 'sequelize';
+import userRoutes from './routes/users';
 
 dotenv.config();
 const app = express();
@@ -26,6 +26,7 @@ app.use(sessionMiddleware);
 // Middleware pour rendre disponible `user` partout dans les views
 app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
+    res.locals.isAuthenticated = !!req.session.user;
     next();
 });
 
@@ -39,6 +40,7 @@ app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 app.use('/cards', cardRoutes);
 app.use('/profile', profileRoutes);
+app.use('/users', userRoutes);
 
 // Gestion centralisée des erreurs
 app.use(errorHandler);
