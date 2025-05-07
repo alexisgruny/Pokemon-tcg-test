@@ -1,10 +1,10 @@
 /* Carrousel */
 .carousel {
-    width: 95%; /* Prend toute la largeur de la page */
+    width: 100%;
     overflow: hidden;
     position: relative;
-    margin: 20px auto; /* Ajuste la marge pour centrer verticalement */
-    perspective: 1000px; /* Ajoute une perspective pour l'effet de profondeur */
+    padding: 35px 0;
+    perspective: 1000px;
 }
 
 .carousel-track {

@@ -10,40 +10,46 @@
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/cards.css">
 </head>
 
 <body>
     <%- include('partials/navbar') %>
 
-        <h1>
-            <%= title %>
-        </h1>
-        <ul>
-            <% cards.forEach(card=> { %>
-                <li>
-                    <p><strong>
-                        <%= card.name %>
-                    </strong></p>
-                    <a href="/cards/<%= card.id %>">
-                        <img src="<%= card.image && card.image !== 'Inconnu' ? card.image + '/high.webp' : '/images/BackCardPokemon.webp' %>" alt="<%= card.name %>">
-                    </a>
-                
-                        <% if (isAuthenticated) { %>
-                    <div class="card-counter" data-card-id="<%= card.id %>">
-                        <button class="decrement">-</button>
-                        <span class="quantity">
-                            <%= card.quantity || 0 %>
-                        </span>
-                        <button class="increment">+</button>
-                    </div>
-                        <% } %>
-                </li>
-                <% }) %>
-        </ul>
+    <h1>
+        <%= title %>
+    </h1>
 
-        <%- include('partials/footer') %>
+    <!-- Bouton pour changer le mode d'affichage -->
+    <button id="toggle-view" class="toggle-view">Changer l'affichage</button>
 
-            <script src="/scripts/cardCounter.js"></script>
+    <ul id="cards-container" class="grid-view">
+        <% cards.forEach(card => { %>
+            <li class="card-item">
+                <p><strong>
+                    <%= card.name %>
+                </strong></p>
+                <a href="/cards/<%= card.id %>">
+                    <img src="<%= card.image && card.image !== 'Inconnu' ? card.image + '/high.webp' : '/images/BackCardPokemon.webp' %>" alt="<%= card.name %>">
+                </a>
+
+                <% if (isAuthenticated) { %>
+                <div class="card-counter" data-card-id="<%= card.id %>">
+                    <button class="decrement">-</button>
+                    <span class="quantity">
+                        <%= card.quantity || 0 %>
+                    </span>
+                    <button class="increment">+</button>
+                </div>
+                <% } %>
+            </li>
+        <% }) %>
+    </ul>
+
+    <%- include('partials/footer') %>
+
+    <script src="/scripts/cardCounter.js"></script>
+    <script src="/scripts/toggleView.js"></script>
 </body>
 
 </html>

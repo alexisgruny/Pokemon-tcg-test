@@ -1,0 +1,66 @@
+/* Conteneur des sets */
+.sets-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Réduit l'espace entre les éléments */
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+/* Élément de set */
+.set-item {
+    flex: 0 1 calc(25% - 15px); /* 4 éléments par ligne */
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px; /* Réduit le padding */
+    background-color: #fff;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.set-item:hover {
+    background-color: #FDE8CF;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Lien du set */
+.set-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    color: #333;
+    height: 150px; /* Réduit la hauteur des liens */
+    padding: 8px; /* Réduit le padding */
+}
+
+/* Image du set */
+.set-link img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 8px; /* Réduit l'espace sous l'image */
+    flex-shrink: 0;
+}
+
+/* Texte du set */
+.set-link p {
+    margin: 0;
+    font-size: 12px; /* Réduit la taille du texte */
+    color: #555;
+    flex-grow: 1; /* Permet au texte de s'étirer si nécessaire */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Effet au survol */
+.set-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

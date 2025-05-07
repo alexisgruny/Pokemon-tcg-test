@@ -1,0 +1,136 @@
+.card-detail-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 20px;
+}
+
+/* Détails de la carte */
+.card-detail {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #fff;
+}
+
+/* Types de Pokémon */
+.Grass {
+    background: linear-gradient(145deg, #d5df28, #88b93e);
+}
+
+.Fire {
+    background: linear-gradient(145deg, #f08030, #c03028);
+}
+
+.Water {
+    background: linear-gradient(145deg, #9fdcf7, #12a0da);
+}
+
+.Lightning {
+    background: linear-gradient(145deg, #f8d030, #e0b020);
+}
+
+.Psychic {
+    background: linear-gradient(145deg, #cf9bc3, #874a97);
+}
+
+.Darkness {
+    background: linear-gradient(145deg, #09322f, #09322f);
+}
+
+.Fighting {
+    background: linear-gradient(145deg, #ebb302, #ce850a);
+}
+
+.Metal {
+    background: linear-gradient(145deg, #e6ecf0, #afbdbb);
+    color: black;
+}
+
+.Dragon {
+    background: linear-gradient(145deg, #debf2c, #706b23);
+}
+
+.Colorless {
+    background: linear-gradient(145deg, #f2f1ed, #e7e3e0);
+    color: black;
+}
+
+.card-detail img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.card-detail p {
+    font-size: 16px;
+    margin: 10px 0;;
+}
+
+.card-detail-annexe {
+    width: auto;
+    height: auto;
+    text-align: center;
+}
+.card-actions {
+    background-color: rgb(143, 141, 137);
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #fff;
+}
+
+.need-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+.action-button .need-button:hover {
+    background-color: #45a049;
+}
+
+.trade-button {
+    background-color: #008CBA; /* Blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+.action-button .trade-button:hover {
+    background-color: #007bb5;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: red; /* Green */
+    transition: background-color 0.3s ease;
+    margin: auto;
+}

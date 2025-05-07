@@ -10,65 +10,77 @@
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/cardsDetail.css">
 </head>
 
 <body>
     <%- include('partials/navbar') %>
-    <div class="card-detail<%= type || 'default-type' %>">
-        <h1>
-            <%= name || 'Nom non disponible' %>
-        </h1>
-        <% if (image) { %><img
-            src="<%= image && image !== 'Inconnu' ? image + '/high.webp' : '/images/BackCardPokemon.webp' %>"
-            alt="<%= name || 'Image non disponible' %>"
-            width="300">
-
-        
-        <% } %>
-        <p><strong>#</strong>
-            <%= localId || 'ID non disponible' %>
-        </p>
-        <p>
-            <%= description || 'Description non disponible' %>
-        </p>
-        <% if (setLogo) { %><img
-            src="<%= setLogo %>.webp" alt="Logo du set"
-            width="100">
-        <% } else { %>
-        <p>Logo du set non disponible</p>
+    <div class="card-detail-container">
+        <div class="card-detail <%= type || 'default-type' %>">
+            <h1>
+                <%= name || 'Nom non disponible' %>
+            </h1>
+            <% if (image) { %><img
+                src="<%= image && image !== 'Inconnu' ? image + '/high.webp' : '/images/BackCardPokemon.webp' %>"
+                alt="<%= name || 'Image non disponible' %>"
+                width="300">
 
 
+            
+            <% } %>
+            <div class="card-info-container">
+                <!-- Détails de la carte -->
+                <div class="card-info">
+                    <p><strong>#</strong>
+                        <%= localId || 'ID non disponible' %>
+                    </p>
+                    <p>
+                        <%= description && description !== 'Inconnu' ? description : 'Cette carte ne posséde pas de déscription' %>
+                    </p>
+                    <% if (setLogo) { %><img
+                        src="<%= setLogo %>.webp"
+                        alt="Logo du set" width="100">
+                    <% } else { %>
+                    <p>Logo du set non disponible</p>
 
-        
-        <% } %>
-        <p>
-            <%= illustrator || 'Illustrateur inconnu' %>
-        </p>
-        <% if (rarity) { %>
-        <p class="<%= rarity %>">Rareté :
-            <%= rarity %>
-        </p>
-        <% } else { %>
-        <p>Rareté non disponible</p>
 
-
-
-        
-        <% } %>
-        <% if (isAuthenticated) { %>
-        <div class="card-counter">
-            <button class="decrement">-</button>
-            <span class="quantity">0</span>
-            <button class="increment">+</button>
+                    
+                    <% } %>
+                    <p>
+                        <%= illustrator || 'Illustrateur inconnu' %>
+                    </p>
+                    <% if (rarity) { %>
+                    <p class="<%= rarity %>">Rareté :
+                        <%= rarity %>
+                    </p>
+                    <% } else { %>
+                    <p>Rareté non disponible</p>
+                
+                    <% } %>
+                </div>
+            </div>
         </div>
 
+        <div class="card-detail-annexe">
 
+            <!-- Boutons et compteur -->
+            <div class="card-actions">
+                <button class="action-button need-button">Je recherche</button>
+                <button class="action-button trade-button">J'échange</button>
+                <% if (isAuthenticated) { %>
+                <div class="card-counter">
+                    <p>Nombre de cartes possédé :</p>
+                    <button class="decrement">-</button>
+                    <span class="quantity">0</span>
+                    <button class="increment">+</button>
+                </div>
 
-        
-        <% } %>
+                <% } %>
+            </div>
+            <a class="back-link" href="/cards/set/<%= setId || '#' %>">Retour à la liste
+                des cartes</a>
+        </div>
     </div>
-    <a href="/cards/set/<%= setId || '#' %>">Retour à la liste
-        des cartes</a>
     <%- include('partials/footer') %>
 </body>
 

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/sets.css">
 </head>
 
 <body>
@@ -15,10 +16,10 @@
     <%- include('partials/navbar') %>
 
         <h1>Liste des sets</h1>
-        <ul>
+        <ul class="sets-container">
             <% sets.forEach(set=> { %>
-                <li>
-                    <a href="/cards/set/<%= set.id %>"> <!-- Lien vers les cartes du set -->
+                <li class="set-item">
+                    <a href="/cards/set/<%= set.id %>" class="set-link"> <!-- Lien vers les cartes du set -->
                         <img src="<%= set.logo %>.webp" alt="<%= sets.name %>">
                         <p>
                             <%= set.name %>

@@ -1,7 +1,7 @@
 /* Footer */
 .footer {
-    background-color: #2a75bb;
-    color: #fff;
+    background-color: rgb(143, 141, 137); 
+    color: rgb(253, 232, 207); 
     padding: 20px 0;
     text-align: center;
     margin-top: auto;
@@ -18,12 +18,12 @@
 }
 
 .footer-links a {
-    color: #ffcb05;
-    font-weight: bold;
+    color: rgb(253, 232, 207);
     text-decoration: none;
+    font-weight: bold;
     transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
-    color: #fff;
+    color: #f0a500;
 }
