@@ -25,7 +25,7 @@
                         <%= card.name %>
                     </strong></p>
                     <a href="/cards/<%= card.id %>">
-                        <img src="<%= card.image %>/high.webp" alt="<%= card.name %>">
+                        <img src="<%= card.image && card.image !== 'Inconnu' ? card.image + '/high.webp' : '/images/BackCardPokemon.webp' %>" alt="<%= card.name %>">
                     </a>
                 
                         <% if (isAuthenticated) { %>

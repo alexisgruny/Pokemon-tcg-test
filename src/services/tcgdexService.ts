@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Card from '../model/card';
 import Set from '../model/set';
+import { updateNullFields } from '../utils/updateNullFields';
 
 const BASE_URL = 'https://api.tcgdex.net/v2/en';
 
@@ -67,20 +68,43 @@ export const syncCardsFromApi = async () => {
                     await Card.upsert({
                         id: detailedCard.id,
                         localId: detailedCard.localId,
-                        description: detailedCard.description || 'Aucune description disponible',
+                        description: detailedCard.description || 'Inconnu',
                         name: detailedCard.name,
-                        image: detailedCard.image,
+                        image: detailedCard.image || 'Inconnu',
                         type: detailedCard.types ? detailedCard.types.join(', ') : 'Inconnu',
                         category: detailedCard.category,
                         rarity: detailedCard.rarity,
                         setId: set.id,
                         setName: set.name,
-                        setLogo: set.logo,
-                        illustrator: detailedCard.illustrator || 'Unconnu',
+                        setLogo: set.logo || 'Inconnu',
+                        illustrator: detailedCard.illustrator || 'Inconnu',
                     });
                     console.log(`Carte ${detailedCard.name} ajoutée avec succès.`);
                 } else {
-                    console.log(`La carte ${card.name} existe déjà.`);
+                    // Si la carte existe, on compare et met à jour les champs non nuls
+                    const detailedResponse = await axios.get(`${BASE_URL}/cards/${card.id}`);
+                    const detailedCard = detailedResponse.data;
+
+                    const updatedFields = updateNullFields(existingCard.get(), {
+                        localId: detailedCard.localId,
+                        description: detailedCard.description,
+                        name: detailedCard.name,
+                        image: detailedCard.image,
+                        type: detailedCard.types ? detailedCard.types.join(', ') : null,
+                        category: detailedCard.category,
+                        rarity: detailedCard.rarity,
+                        setId: set.id,
+                        setName: set.name,
+                        setLogo: set.logo,
+                        illustrator: detailedCard.illustrator,
+                    });
+
+                    if (Object.keys(updatedFields).length > 0) {
+                        await existingCard.update(updatedFields);
+                        console.log(`Carte ${existingCard.name} mise à jour avec succès.`);
+                    } else {
+                        console.log(`Aucune mise à jour nécessaire pour la carte ${existingCard.name}.`);
+                    }
                 }
             }
             console.log(`Cartes du set ${setId} synchronisées avec succès.`);

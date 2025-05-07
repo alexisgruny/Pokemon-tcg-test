@@ -19,11 +19,9 @@
             <%= name || 'Nom non disponible' %>
         </h1>
         <% if (image) { %><img
-            src="<%= image %>/high.webp"
+            src="<%= image && image !== 'Inconnu' ? image + '/high.webp' : '/images/BackCardPokemon.webp' %>"
             alt="<%= name || 'Image non disponible' %>"
             width="300">
-        <% } else { %>
-        <p>Image non disponible</p>
 
         
         <% } %>
@@ -39,6 +37,8 @@
         <% } else { %>
         <p>Logo du set non disponible</p>
 
+
+
         
         <% } %>
         <p>
@@ -51,6 +51,8 @@
         <% } else { %>
         <p>Rareté non disponible</p>
 
+
+
         
         <% } %>
         <% if (isAuthenticated) { %>
@@ -59,6 +61,8 @@
             <span class="quantity">0</span>
             <button class="increment">+</button>
         </div>
+
+
 
         
         <% } %>

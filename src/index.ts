@@ -13,7 +13,7 @@ async function startServer() {
 
         // Synchronisation des sets et des cartes depuis l'API
         await syncSetsFromApi(); 
-        await syncCardsFromApi();  // Synchronise les cartes de chaque set
+        await syncCardsFromApi(); 
         console.log('Toutes les cartes et sets ont été synchronisées avec succès.');
 
         // Démarre le serveur

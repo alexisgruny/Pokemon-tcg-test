@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Pokemon Solid';
+    src: url('../font/Pokemon_Solid_Normal/Pokemon_Solid.ttf') format('truetype');
+}
+
 /* Styles généraux */
 body {
     font-family: 'Roboto', Arial, sans-serif;
@@ -8,6 +13,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-image: url('../images/pokeballBG.png');
 }
 
 h1 {
@@ -15,7 +21,7 @@ h1 {
     margin: 20px 0;
     color: #ffcb05; /* Couleur jaune Pokémon */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    font-family: 'Pokemon Solid', sans-serif; /* Utilise une police Pokémon si disponible */
+    font-family: 'Pokemon Solid', sans-serif;
 }
 
 ul {
