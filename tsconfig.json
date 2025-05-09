@@ -15,6 +15,6 @@
        "./node_modules/@types" 
      ]
   },
-  "include": ["src/**/*.ts"],         // Inclut tous les fichiers .ts sous "src"
+  "include": ["src/**/*", "src/views/**/*"],      // Inclut tous les fichiers .ts sous "src"
   "exclude": ["node_modules", "dist"], // Exclut les répertoires de compilation
 }

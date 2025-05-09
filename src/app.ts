@@ -18,8 +18,6 @@ const app = express();
 
 // Synchronisation de la base de données
 const cron = require('./cronJobs');
-cron.schedule();
-
 // Middlewares globaux
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
