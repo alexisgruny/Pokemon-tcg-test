@@ -27,6 +27,9 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware de session
 app.use(sessionMiddleware);
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Middleware pour rendre disponible `user` partout dans les views
 app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
