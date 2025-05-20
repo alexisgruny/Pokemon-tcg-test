@@ -4,9 +4,12 @@
     "description": "Un modèle de projet TypeScript avec Node.js",
     "main": "dist/index.js",
     "scripts": {
-        "build": "tsc",
+        "build": "tsc && npm run copy-assets",
         "start": "node dist/index.js",
-        "dev": "nodemon --watch src --exec ts-node src/index.ts"
+        "dev": "nodemon --watch src --exec ts-node src/index.ts",
+        "copy-assets": "npm run copy-views && npm run copy-public",
+        "copy-views": "xcopy src\\views dist\\views /E /I /Y",
+        "copy-public": "xcopy src\\public dist\\public /E /I /Y"
     },
     "keywords": [],
     "author": "",
@@ -14,6 +17,8 @@
     "devDependencies": {
         "@types/express-session": "^1.18.1",
         "@types/node": "^20.0.0",
+        "@types/passport": "^1.0.17",
+        "@types/passport-google-oauth20": "^2.0.16",
         "nodemon": "^2.0.0",
         "ts-node": "^10.0.0",
         "typescript": "^5.8.3"
@@ -28,6 +33,8 @@
         "express": "^5.1.0",
         "express-session": "^1.18.1",
         "node-cron": "^3.0.3",
+        "passport": "^0.7.0",
+        "passport-google-oauth20": "^2.0.0",
         "pg": "^8.14.1",
         "pg-hstore": "^2.3.4",
         "sequelize": "^6.37.7"
