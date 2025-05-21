@@ -153,3 +153,87 @@
     margin: 5px 5px;
     text-align: center;
 }
+
+/* boutton filtre */
+.btn {
+  width: 100px;
+  height: 100px;
+  background-size: 400% 300%; /* 4 colonnes, 3 lignes */
+  background-position: calc(var(--x) * 100%) calc(var(--y) * 100%);
+  border: none;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: transform 0.2s;
+}
+
+button.btn img {
+  pointer-events: none; /* pour éviter que le clic soit capté par l'image */
+    max-width: 100%;
+  max-height: 100%;
+  width: 100px;
+  height: 40px;
+  display: block;
+  margin: auto;
+}
+
+.fire {
+        background-image: url(../images/energy-types.png);
+        background-position: 0px 0px;
+        width: 25px;
+        height: 25px;
+}
+.water {
+        background-image: url(../images/energy-types.png);
+        background-position: -75px -50px;
+        width: 25px;
+        height: 25px;
+}
+.lightning {
+        background-image: url(../images/energy-types.png);
+        background-position: -50px -50px;
+        width: 25px;
+        height: 25px;
+}
+.grass {
+        background-image: url(../images/energy-types.png);
+        background-position: -25px -50px;
+        width: 25px;
+        height: 25px;
+}
+.fighting {
+        background-image: url(../images/energy-types.png);
+        background-position: -50px -25px;
+        width: 25px;
+        height: 25px;
+}
+.psychic {
+        background-image: url(../images/energy-types.png);
+        background-position: -75px -25px;
+        width: 25px;
+        height: 25px;
+}
+.dragon {
+        background-image: url(../images/energy-types.png);
+        background-position: 0px -25px;
+        width: 25px;
+        height: 25px;
+}
+.darkness {
+        background-image: url(../images/energy-types.png);
+        background-position: 0px -50px;
+        width: 25px;
+        height: 25px;
+}
+.metal {
+        background-image: url(../images/energy-types.png);
+        background-position: -75px 0px;
+        width: 25px;
+        height: 25px;
+}
+.colorless {
+        background-image: url(../images/energy-types.png);
+        background-position: -25px 0px;
+        width: 25px;
+        height: 25px;
+}

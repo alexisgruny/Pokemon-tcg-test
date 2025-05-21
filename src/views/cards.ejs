@@ -24,53 +24,51 @@
         <button id="toggle-view" class="toggle-view">Changer l'affichage</button>
 
         <div class="filters">
-            <label for="sort">Trier par :</label>
-            <select id="sort">
-                <option value="number">Numéro</option>
-                <option value="name">Nom (A-Z)</option>
-            </select>
+            <div id="filter-buttons" class="button-group">
+                <button class="btn" data-value="number">1-9</button>
+                <button class="btn" data-value="name">A-Z</button>
+            </div>
 
-            <label for="type">Type :</label>
-            <select id="type">
-                <option value="all">Tous</option>
-                <option value="Fire">Feu</option>
-                <option value="Water">Eau</option>
-                <option value="Lightning">Électrique</option>
-                <option value="Grass">Plante</option>
-                <option value="Fighting">Combat</option>
-                <option value="Psychic">Psy</option>
-                <option value="Dragon">Dragon</option>
-                <option value="Darkness">Obscure</option>
-                <option value="Metal">Acier</option>
-                <option value="Colorless">Normal</option>
+
+            <div id="type-buttons" class="button-group">
+                <button class="btn all active" data-value="all">Tous</button>
+                <button class="btn fire" data-value="Fire"></button>
+                <button class="btn water" data-value="Water"></button>
+                <button class="btn lightning" data-value="Lightning"></button>
+                <button class="btn grass" data-value="Grass"></button>
+                <button class="btn fighting" data-value="Fighting"></button>
+                <button class="btn psychic" data-value="Psychic"></button>
+                <button class="btn dragon" data-value="Dragon"></button>
+                <button class="btn darkness" data-value="Darkness"></button>
+                <button class="btn metal" data-value="Metal"></button>
+                <button class="btn colorless" data-value="Colorless"></button>
                 <!-- Ajoute les autres types ici -->
-            </select>
+            </div>
 
-            <label for="rarity">Rareté :</label>
-            <select id="rarity">
-                <option value="all">Toutes</option>
-                <option value="One Diamond">Commune</option>
-                <option value="Two Diamond">Silver</option>
-                <option value="Three Diamond">EX</option>
-                <option value="Four Diamond">Full-Art</option>
-                <option value="One Star">EX-Full-Art</option>
-                <option value="Two Star">Shiny</option>
-                <option value="Three Star">Animé</option>
-                <option value="Crown">Gold</option>
-                <option value="One Shiny">Promo</option>
-            </select>
+            <div id="rarity-buttons" class="button-group">
+                <button class="btn" data-value="all">Tous</button>
+                <button class="btn" data-value="One Diamond">Commune</button>
+                <button class="btn" data-value="Two Diamond">Silver</button>
+                <button class="btn" data-value="Three Diamond">EX</button>
+                <button class="btn" data-value="Four Diamond">Full-Art</button>
+                <button class="btn" data-value="One Star">EX-Full-Art</button>
+                <button class="btn" data-value="Two Star">Shiny</button>
+                <button class="btn" data-value="Three Star">Animé</button>
+                <button class="btn" data-value="Crown">Gold</button>
+                <button class="btn" data-value="One Shiny">Promo</button>
+            </div>
 
-            <label for="set">Set :</label>
-            <select id="set">
-                <option value="all">Tous</option>
-                <option value="Genetic Apex">Puissance génétique</option>
-                <option value="Mythical Island">Île fabuleuse</option>
-                <option value="Space-Time Smackdown">Choc spatio-temporel</option>
-                <option value="Triumphant Light">Lumière triomphale</option>
-                <option value="Shining Revelry">Réjouissances rayonnantes</option>
-                <option value="Celestial Guardians">Gardiens astraux</option>
-                <option value="Promos-A">Neo Genesis</option>
-            </select>
+            <div id="set-buttons" class="button-group">
+                <button class="btn" data-value="all">Tous</button>
+                <button class="btn" data-value="Genetic Apex"><img src="https://assets.tcgdex.net/en/tcgp/A1/logo.webp" alt="Genetic Apex"></button>
+                <button class="btn" data-value="Mythical Island"><img src="https://assets.tcgdex.net/en/tcgp/A1a/logo.webp" alt="Mythical Island"></button>
+                <button class="btn" data-value="Space-Time Smackdown"><img src="https://assets.tcgdex.net/en/tcgp/A2/logo.webp" alt="Space-Time Smackdown"></button>
+                <button class="btn" data-value="Triumphant Light"><img src="https://assets.tcgdex.net/en/tcgp/A2a/logo.webp" alt="Triumphant Light"></button>
+                <button class="btn" data-value="Shining Revelry"><img src="https://assets.tcgdex.net/en/tcgp/A2b/logo.webp" alt="Shining Revelry"></button>
+                <button class="btn" data-value="Celestial Guardians"><img src="https://assets.tcgdex.net/en/tcgp/A3/logo.webp" alt="Celestial Guardians"></button>
+                <button class="btn" data-value="Promos-A"><img src="https://assets.tcgdex.net/en/tcgp/P-A/logo.webp" alt="Promos-A"></button>
+            </div>
+
             <label for="search">Recherche :</label>
             <input type="text" id="search" placeholder="Rechercher un Pokémon..." autocomplete="off" />
             <ul id="autocomplete-results"></ul>

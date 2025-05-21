@@ -11,11 +11,6 @@ async function startServer() {
         await sequelize.sync({ force: false }); 
         console.log('Connexion à la base de données réussie.');
 
-        // Synchronisation des sets et des cartes depuis l'API
-        await syncSetsFromApi(); 
-        await syncCardsFromApi(); 
-        console.log('Toutes les cartes et sets ont été synchronisées avec succès.');
-
         // Démarre le serveur
         app.listen(PORT, () => {
             console.log(`Serveur démarré sur http://localhost:${PORT}`);

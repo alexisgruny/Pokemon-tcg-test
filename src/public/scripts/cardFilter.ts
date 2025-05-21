@@ -1,11 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const sortSelect = document.getElementById("sort") as HTMLSelectElement;
-  const typeSelect = document.getElementById("type") as HTMLSelectElement;
-  const raritySelect = document.getElementById("rarity") as HTMLSelectElement;
-  const setSelect = document.getElementById("set") as HTMLSelectElement;
   const searchInput = document.getElementById("search") as HTMLInputElement;
   const autoCompleteList = document.getElementById("autocomplete-results") as HTMLUListElement;
   const cardsContainer = document.getElementById("cards-container") as HTMLElement;
+
+  const typeButtons = document.querySelectorAll("#type-buttons button") as NodeListOf<HTMLButtonElement>;
+  const rarityButtons = document.querySelectorAll("#rarity-buttons button") as NodeListOf<HTMLButtonElement>;
+  const sortButtons = document.querySelectorAll("#sort-buttons button") as NodeListOf<HTMLButtonElement>;
+  const setButtons = document.querySelectorAll("#set-buttons button") as NodeListOf<HTMLButtonElement>;
+
+  let selectedType = "all";
+  let selectedRarity = "all";
+  let selectedSort = "number";
+  let selectedSet = "all";
 
   const allCards: HTMLElement[] = Array.from(cardsContainer.querySelectorAll(".card-item"));
 
@@ -20,18 +26,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function filterAndSortCards() {
-    const type = typeSelect.value;
-    const rarity = raritySelect.value;
-    const set = setSelect.value;
     const search = searchInput.value.toLowerCase();
-    const sortBy = sortSelect.value;
-    const filtered = allCards.filter(card => {
-      const { name, type: cardType, rarity: cardRarity, set: cardSet } = getCardData(card);
 
-      const matchType = type === "all" || cardType === type;
-      const matchRarity = rarity === "all" || cardRarity === rarity;
-      const matchSet = set ==="all" || cardSet === set;
+    const filtered = allCards.filter(card => {
+      const { name, type, rarity, set } = getCardData(card);
+
+      const matchType = selectedType === "all" || type === selectedType;
+      const matchRarity = selectedRarity === "all" || rarity === selectedRarity;
       const matchSearch = name.includes(search);
+      const matchSet = selectedSet === "all" || set === selectedSet;
 
       return matchType && matchRarity && matchSearch && matchSet;
     });
@@ -40,13 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const aData = getCardData(a);
       const bData = getCardData(b);
 
-      if (sortBy === "name") {
+      if (selectedSort === "name") {
         return aData.name.localeCompare(bData.name);
       }
       return aData.number - bData.number;
     });
 
-    // Réafficher
     cardsContainer.innerHTML = "";
     filtered.forEach(card => cardsContainer.appendChild(card));
   }
@@ -77,11 +79,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Events
-  sortSelect.addEventListener("change", filterAndSortCards);
-  typeSelect.addEventListener("change", filterAndSortCards);
-  raritySelect.addEventListener("change", filterAndSortCards);
-  setSelect.addEventListener("change", filterAndSortCards);
+  function setupButtonGroup(buttons: NodeListOf<HTMLButtonElement>, onChange: (value: string) => void) {
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        buttons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        onChange(button.dataset.value!);
+        filterAndSortCards();
+      });
+    });
+  }
+
+  setupButtonGroup(typeButtons, value => selectedType = value);
+  setupButtonGroup(rarityButtons, value => selectedRarity = value);
+  setupButtonGroup(sortButtons, value => selectedSort = value);
+  setupButtonGroup(setButtons, value => selectedSet = value);
+
   searchInput.addEventListener("input", () => {
     updateAutocomplete();
     filterAndSortCards();
