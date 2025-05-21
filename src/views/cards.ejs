@@ -16,40 +16,95 @@
 <body>
     <%- include('partials/navbar') %>
 
-    <h1>
-        <%= title %>
-    </h1>
+        <h1>
+            <%= title %>
+        </h1>
 
-    <!-- Bouton pour changer le mode d'affichage -->
-    <button id="toggle-view" class="toggle-view">Changer l'affichage</button>
+        <!-- Bouton pour changer le mode d'affichage -->
+        <button id="toggle-view" class="toggle-view">Changer l'affichage</button>
 
-    <ul id="cards-container" class="grid-view">
-        <% cards.forEach(card => { %>
-            <li class="card-item">
-                <p><strong>
-                    <%= card.name %>
-                </strong></p>
-                <a href="/cards/<%= card.id %>">
-                    <img src="<%= card.image && card.image !== 'Inconnu' ? card.image + '/high.webp' : '/images/BackCardPokemon.webp' %>" alt="<%= card.name %>">
-                </a>
+        <div class="filters">
+            <label for="sort">Trier par :</label>
+            <select id="sort">
+                <option value="number">Numéro</option>
+                <option value="name">Nom (A-Z)</option>
+            </select>
 
-                <% if (isAuthenticated) { %>
-                <div class="card-counter" data-card-id="<%= card.id %>">
-                    <button class="decrement">-</button>
-                    <span class="quantity">
-                        <%= card.quantity || 0 %>
-                    </span>
-                    <button class="increment">+</button>
-                </div>
-                <% } %>
-            </li>
-        <% }) %>
-    </ul>
+            <label for="type">Type :</label>
+            <select id="type">
+                <option value="all">Tous</option>
+                <option value="Fire">Feu</option>
+                <option value="Water">Eau</option>
+                <option value="Lightning">Électrique</option>
+                <option value="Grass">Plante</option>
+                <option value="Fighting">Combat</option>
+                <option value="Psychic">Psy</option>
+                <option value="Dragon">Dragon</option>
+                <option value="Darkness">Obscure</option>
+                <option value="Metal">Acier</option>
+                <option value="Colorless">Normal</option>
+                <!-- Ajoute les autres types ici -->
+            </select>
 
-    <%- include('partials/footer') %>
+            <label for="rarity">Rareté :</label>
+            <select id="rarity">
+                <option value="all">Toutes</option>
+                <option value="One Diamond">Commune</option>
+                <option value="Two Diamond">Silver</option>
+                <option value="Three Diamond">EX</option>
+                <option value="Four Diamond">Full-Art</option>
+                <option value="One Star">EX-Full-Art</option>
+                <option value="Two Star">Shiny</option>
+                <option value="Three Star">Animé</option>
+                <option value="Crown">Gold</option>
+                <option value="One Shiny">Promo</option>
+            </select>
 
-    <script src="/scripts/cardCounter.js"></script>
-    <script src="/scripts/toggleView.js"></script>
+            <label for="set">Set :</label>
+            <select id="set">
+                <option value="all">Tous</option>
+                <option value="Genetic Apex">Puissance génétique</option>
+                <option value="Mythical Island">Île fabuleuse</option>
+                <option value="Space-Time Smackdown">Choc spatio-temporel</option>
+                <option value="Triumphant Light">Lumière triomphale</option>
+                <option value="Shining Revelry">Réjouissances rayonnantes</option>
+                <option value="Celestial Guardians">Gardiens astraux</option>
+                <option value="Promos-A">Neo Genesis</option>
+            </select>
+            <label for="search">Recherche :</label>
+            <input type="text" id="search" placeholder="Rechercher un Pokémon..." autocomplete="off" />
+            <ul id="autocomplete-results"></ul>
+        </div>
+
+        <ul id="cards-container" class="grid-view">
+            <% cards.forEach(card=> { %>
+                <li class="card-item">
+                    <p><strong>
+                            <%= card.name %>
+                        </strong></p>
+                    <a href="/cards/<%= card.id %>">
+                        <img src="<%= card.image && card.image !== 'Inconnu' ? card.image + '/high.webp' : '/images/BackCardPokemon.webp' %>"
+                            alt="<%= card.name %>" data-type="<%= card.type %>" data-rarity="<%= card.rarity %>"
+                            data-set="<%= card.setName %>">
+                    </a>
+                    <% if (isAuthenticated) { %>
+                        <div class="card-counter" data-card-id="<%= card.id %>">
+                            <button class="decrement">-</button>
+                            <span class="quantity">
+                                <%= card.quantity || 0 %>
+                            </span>
+                            <button class="increment">+</button>
+                        </div>
+                        <% } %>
+                </li>
+                <% }); %>
+        </ul>
+
+        <%- include('partials/footer') %>
+
+            <script src="/scripts/cardCounter.js"></script>
+            <script src="/scripts/toggleView.js"></script>
+            <script src="/scripts/cardFilter.js"></script>
 </body>
 
 </html>

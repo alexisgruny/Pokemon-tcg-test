@@ -1,23 +1,20 @@
 import { Request, Response } from 'express';
 import OwnedCard from '../model/ownedCard';
 import Card from '../model/card';
-import { isAuthenticated } from 'src/middlewares/authMiddleware';
 
 // Afficher toutes les cartes d'un set spécifique
-export const showCardsBySet = async (req: Request, res: Response) => {
+export const showAllCards = async (req: Request, res: Response) => {
     try {
-        const setId = req.params.setId;
-
         // Vérifie si l'utilisateur est connecté
         const userId = req.session?.user?.id || null;
 
-        // 🔄 Récupère les cartes du set depuis ta base avec les infos du set
-        const cards: Card[] = await Card.findAll({ where: { setId } });
+        // Récupère l'ID du set depuis les paramètres de la requête
+        const cards: Card[] = await Card.findAll();
 
-        // 📦 Récupère les cartes possédées par l'utilisateur
+        // Récupère les cartes possédées par l'utilisateur
         const ownedCards = await OwnedCard.findAll({ where: { userId } });
 
-        // 🔗 Ajoute la quantité de possession
+        //  Ajoute la quantité de possession
         const cardsWithOwnership = cards.map(card => {
             const owned = ownedCards.find(o => o.cardId === card.id);
             return {
@@ -29,13 +26,13 @@ export const showCardsBySet = async (req: Request, res: Response) => {
         });
 
         res.render('cards', {
-            title: `Cartes du set ${setId}`,
+            title: `Cartes`,
             cards: cardsWithOwnership,
             isAuthenticated: req.session.user ? true : false,
         });
     } catch (error) {
-        console.error('Erreur lors de la récupération des cartes du set :', error);
-        res.status(500).send('Erreur lors de la récupération des cartes du set.');
+        console.error('Erreur lors de la récupération des cartes :', error);
+        res.status(500).send('Erreur lors de la récupération des cartes.');
     }
 };
 

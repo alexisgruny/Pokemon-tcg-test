@@ -1,14 +1,11 @@
 import { Router } from 'express';
 import { showAllSets } from '../controllers/setsController';
-import { showCardsBySet, showCardDetails, addOrUpdateCard, } from '../controllers/cardsController';
+import { showAllCards, showCardDetails, addOrUpdateCard, } from '../controllers/cardsController';
 
 const router = Router();
 
-// Route pour afficher tous les sets
-router.get('/sets', showAllSets);
-
 // Routes pour Afficher les cartes
-router.get('/set/:setId',showCardsBySet);
+router.get('/cards',showAllCards);
 router.get('/:id', showCardDetails);
 
 // Routes pour ajouter, modifier et supprimer une carte

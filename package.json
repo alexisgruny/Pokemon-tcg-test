@@ -1,5 +1,5 @@
 {
-    "name": "mon-projet",
+    "name": "pokemontcgptrade",
     "version": "1.0.0",
     "description": "Un modèle de projet TypeScript avec Node.js",
     "main": "dist/index.js",
@@ -7,6 +7,7 @@
         "build": "tsc && npm run copy-assets",
         "start": "node dist/index.js",
         "dev": "nodemon --watch src --exec ts-node src/index.ts",
+        "ts:watch": "tsc --watch",
         "copy-assets": "npm run copy-views && npm run copy-public",
         "copy-views": "xcopy src\\views dist\\views /E /I /Y",
         "copy-public": "xcopy src\\public dist\\public /E /I /Y"
