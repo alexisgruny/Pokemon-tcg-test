@@ -22,64 +22,81 @@
 
         <!-- Bouton pour changer le mode d'affichage -->
         <button id="toggle-view" class="toggle-view">Changer l'affichage</button>
-
-        <div class="filters">
-            <div id="filter-buttons" class="button-group">
-                <button class="btn" data-value="number">1-9</button>
-                <button class="btn" data-value="name">A-Z</button>
+        <div id="filter-container">
+            <div class="filters">
+                <div id="filter-buttons" class="button-group">
+                    <button class="btn active" data-value="number">1-9</button>
+                    <button class="btn" data-value="name">A-Z</button>
+                </div>
+                <div class="filter-group">
+                    <button class="filter-toggle btn" data-target="type-buttons">Type</button>
+                </div>
+                <div class="filter-group">
+                    <button class="filter-toggle btn" data-target="rarity-buttons">Rareté</button>
+                </div>
+                <div class="filter-group">
+                    <button class="filter-toggle btn" data-target="set-buttons">Set</button>
+                </div>
+                <div class="filter-group">
+                    <input type="text" id="search" placeholder="Rechercher un Pokémon..." autocomplete="off" />
+                    <ul id="autocomplete-results"></ul>
+                </div>
             </div>
 
-
-            <div id="type-buttons" class="button-group">
-                <button class="btn all active" data-value="all">Tous</button>
-                <button class="btn fire" data-value="Fire"></button>
-                <button class="btn water" data-value="Water"></button>
-                <button class="btn lightning" data-value="Lightning"></button>
-                <button class="btn grass" data-value="Grass"></button>
-                <button class="btn fighting" data-value="Fighting"></button>
-                <button class="btn psychic" data-value="Psychic"></button>
-                <button class="btn dragon" data-value="Dragon"></button>
-                <button class="btn darkness" data-value="Darkness"></button>
-                <button class="btn metal" data-value="Metal"></button>
-                <button class="btn colorless" data-value="Colorless"></button>
-                <!-- Ajoute les autres types ici -->
+            <div class="filter-buttons">
+                <div id="type-buttons" class="button-group hidden">
+                    <button class="btn active" data-value="all">Tous</button>
+                    <button class="btn fire" data-value="Fire"></button>
+                    <button class="btn water" data-value="Water"></button>
+                    <button class="btn lightning" data-value="Lightning"></button>
+                    <button class="btn grass" data-value="Grass"></button>
+                    <button class="btn fighting" data-value="Fighting"></button>
+                    <button class="btn psychic" data-value="Psychic"></button>
+                    <button class="btn dragon" data-value="Dragon"></button>
+                    <button class="btn darkness" data-value="Darkness"></button>
+                    <button class="btn metal" data-value="Metal"></button>
+                    <button class="btn colorless" data-value="Colorless"></button>
+                </div>
+                <div id="rarity-buttons" class="button-group hidden">
+                    <button class="btn active" data-value="all">Tous</button>
+                    <button class="btn" data-value="One Diamond"><img src="../images/diamond.png"
+                            alt="One Diamond"></button>
+                    <button class="btn" data-value="Two Diamond"><img src="../images/diamond2.png"
+                            alt="Two Diamond"></button>
+                    <button class="btn" data-value="Three Diamond"><img src="../images/diamond3.png"
+                            alt="Three Diamond"></button>
+                    <button class="btn" data-value="Four Diamond"><img src="../images/diamond4.png"
+                            alt="Four Diamond"></button>
+                    <button class="btn" data-value="One Star"><img src="../images/star.png" alt="One Star"></button>
+                    <button class="btn" data-value="Two Star"><img src="../images/star2.png" alt="Two Star"></button>
+                    <button class="btn" data-value="Three Star"><img src="../images/star3.png"
+                            alt="Three Star"></button>
+                    <button class="btn" data-value="Crown"><img src="../images/crown.png" alt="Crown"></button>
+                    <button class="btn" data-value="One Shiny"><img src="../images/shiny.webp" alt="One Shiny"></button>
+                    <button class="btn" data-value="Two Shiny"><img src="../images/shiny2.png" alt="Two Shiny"></button>
+                </div>
+                <div id="set-buttons" class="button-group hidden">
+                    <button class="btn active" data-value="all">Tous</button>
+                    <button class="btn" data-value="Genetic Apex"><img
+                            src="https://assets.tcgdex.net/en/tcgp/A1/logo.webp" alt="Genetic Apex"></button>
+                    <button class="btn" data-value="Mythical Island"><img
+                            src="https://assets.tcgdex.net/en/tcgp/A1a/logo.webp" alt="Mythical Island"></button>
+                    <button class="btn" data-value="Space-Time Smackdown"><img
+                            src="https://assets.tcgdex.net/en/tcgp/A2/logo.webp" alt="Space-Time Smackdown"></button>
+                    <button class="btn" data-value="Triumphant Light"><img
+                            src="https://assets.tcgdex.net/en/tcgp/A2a/logo.webp" alt="Triumphant Light"></button>
+                    <button class="btn" data-value="Shining Revelry"><img
+                            src="https://assets.tcgdex.net/en/tcgp/A2b/logo.webp" alt="Shining Revelry"></button>
+                    <button class="btn" data-value="Celestial Guardians"><img
+                            src="https://assets.tcgdex.net/en/tcgp/A3/logo.webp" alt="Celestial Guardians"></button>
+                    <button class="btn" data-value="Promos-A"><img src="https://assets.tcgdex.net/en/tcgp/P-A/logo.webp"
+                            alt="Promos-A"></button>
+                </div>
             </div>
-
-            <div id="rarity-buttons" class="button-group">
-                <button class="btn" data-value="all">Tous</button>
-                <button class="btn" data-value="One Diamond">Commune</button>
-                <button class="btn" data-value="Two Diamond">Silver</button>
-                <button class="btn" data-value="Three Diamond">EX</button>
-                <button class="btn" data-value="Four Diamond">Full-Art</button>
-                <button class="btn" data-value="One Star">EX-Full-Art</button>
-                <button class="btn" data-value="Two Star">Shiny</button>
-                <button class="btn" data-value="Three Star">Animé</button>
-                <button class="btn" data-value="Crown">Gold</button>
-                <button class="btn" data-value="One Shiny">Promo</button>
-            </div>
-
-            <div id="set-buttons" class="button-group">
-                <button class="btn" data-value="all">Tous</button>
-                <button class="btn" data-value="Genetic Apex"><img src="https://assets.tcgdex.net/en/tcgp/A1/logo.webp" alt="Genetic Apex"></button>
-                <button class="btn" data-value="Mythical Island"><img src="https://assets.tcgdex.net/en/tcgp/A1a/logo.webp" alt="Mythical Island"></button>
-                <button class="btn" data-value="Space-Time Smackdown"><img src="https://assets.tcgdex.net/en/tcgp/A2/logo.webp" alt="Space-Time Smackdown"></button>
-                <button class="btn" data-value="Triumphant Light"><img src="https://assets.tcgdex.net/en/tcgp/A2a/logo.webp" alt="Triumphant Light"></button>
-                <button class="btn" data-value="Shining Revelry"><img src="https://assets.tcgdex.net/en/tcgp/A2b/logo.webp" alt="Shining Revelry"></button>
-                <button class="btn" data-value="Celestial Guardians"><img src="https://assets.tcgdex.net/en/tcgp/A3/logo.webp" alt="Celestial Guardians"></button>
-                <button class="btn" data-value="Promos-A"><img src="https://assets.tcgdex.net/en/tcgp/P-A/logo.webp" alt="Promos-A"></button>
-            </div>
-
-            <label for="search">Recherche :</label>
-            <input type="text" id="search" placeholder="Rechercher un Pokémon..." autocomplete="off" />
-            <ul id="autocomplete-results"></ul>
         </div>
-
         <ul id="cards-container" class="grid-view">
             <% cards.forEach(card=> { %>
                 <li class="card-item">
-                    <p><strong>
-                            <%= card.name %>
-                        </strong></p>
                     <a href="/cards/<%= card.id %>">
                         <img src="<%= card.image && card.image !== 'Inconnu' ? card.image + '/high.webp' : '/images/BackCardPokemon.webp' %>"
                             alt="<%= card.name %>" data-type="<%= card.type %>" data-rarity="<%= card.rarity %>"

@@ -8,6 +8,7 @@
         "start": "node dist/index.js",
         "dev": "nodemon --watch src --exec ts-node src/index.ts",
         "ts:watch": "tsc --watch",
+        "watch:build": "nodemon --watch src --ext ts,ejs,css,js --exec \"npm run build\"",
         "copy-assets": "npm run copy-views && npm run copy-public",
         "copy-views": "xcopy src\\views dist\\views /E /I /Y",
         "copy-public": "xcopy src\\public dist\\public /E /I /Y"
