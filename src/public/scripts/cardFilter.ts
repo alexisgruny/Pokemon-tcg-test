@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     [...names].slice(0, 5).forEach(name => {
-      const li = document.createElement("li");
+      const button = document.createElement("li");
       li.textContent = name;
       li.addEventListener("click", () => {
         searchInput.value = name;
