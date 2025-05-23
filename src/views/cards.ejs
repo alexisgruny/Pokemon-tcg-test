@@ -96,7 +96,7 @@
         </div>
         <ul id="cards-container" class="grid-view">
             <% cards.forEach(card=> { %>
-                <li class="card-item">
+                <li class="card-item not-owned">
                     <a href="/cards/<%= card.id %>">
                         <img src="<%= card.image && card.image !== 'Inconnu' ? card.image + '/high.webp' : '/images/BackCardPokemon.webp' %>"
                             alt="<%= card.name %>" data-type="<%= card.type %>" data-rarity="<%= card.rarity %>"
@@ -117,9 +117,8 @@
 
         <%- include('partials/footer') %>
 
-            <script src="/scripts/cardCounter.js"></script>
             <script src="/scripts/toggleView.js"></script>
-            <script src="/scripts/cardFilter.js"></script>
+            <script src="/scripts/cardScript.js"></script>
 </body>
 
 </html>

@@ -320,3 +320,8 @@ button.btn img {
 .hidden{
     display: none;
 }
+
+.card-item.not-owned {
+  opacity: 0.4;
+  filter: grayscale(100%);
+}
