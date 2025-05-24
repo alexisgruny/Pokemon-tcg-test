@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/registerForm.css">
 </head>
 
 <body>
@@ -17,31 +18,38 @@
 
         <h1>Formulaire d'inscription</h1>
         <form action="/auth/register" method="POST">
-            <label for="username">Nom d'utilisateur :</label>
-            <input type="text" id="username" name="username" required>
-            <br><br>
-
-            <label for="email">Email :</label>
-            <input type="email" id="email" name="email" required>
-            <br><br>
-
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" required>
-            <br><br>
-
-            <label for="inGameName">Nom en jeu :</label>
-            <input type="text" id="inGameName" name="inGameName" required>
-            <br><br>
-
-            <label for="friendCode">Code ami :</label>
-            <input type="text" id="friendCode" name="friendCode" maxlength="14" required>
-            <br><br>
-
+            <div>
+                <label for="username">Nom d'utilisateur : </label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+                <label for="email">Email : </label><br>
+                <input type="email" id="email" name="email" required>
+                <div id="emailVerification"></div>
+            </div>
+            <div>
+                <label for="password">Mot de passe : </label>
+                <input type="password" id="password" name="password" required>
+                <div id="passwordStrength"></div>
+            </div>
+            <div>
+                <label for="confirmPassword">Confirmer le mot de passe : </label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div id="passwordVerification"></div>
+            </div>
+            <div>
+                <label for="inGameName">Nom en jeu : </label>
+                <input type="text" id="inGameName" name="inGameName" required>
+            </div>
+            <div>
+                <label for="friendCode">Code ami : </label>
+                <input type="text" id="friendCode" name="friendCode" maxlength="14" required>
+            </div>
             <button type="submit">S'inscrire</button>
         </form>
 
         <%- include('partials/footer') %>
-        <script src="/scripts/friendCode.js"></script>
+            <script src="/scripts/registerFormScript.js"></script>
 </body>
 
 </html>

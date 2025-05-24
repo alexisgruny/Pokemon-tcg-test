@@ -1,0 +1,63 @@
+/* Formulaire centré et responsive */
+form {
+  max-width: 50%;
+  margin: 1rem auto;
+  padding: 2rem 1.5rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  color: #000
+}
+
+form label {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+form input[type="email"],
+form input[type="password"],
+form input[type="text"] {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+
+form input:focus {
+  border-color: #a0c4ff;
+  outline: none;
+}
+
+form button[type="submit"] {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+form button[type="submit"]:hover {
+  background: #1565c0;
+}
+
+form p {
+  text-align: center;
+  margin: 0.5rem 0 0 0;
+}
+
+form a {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+form a:hover {
+  text-decoration: underline;
+}
