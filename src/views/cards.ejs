@@ -96,14 +96,14 @@
         </div>
         <ul id="cards-container" class="grid-view">
             <% cards.forEach(card=> { %>
-                <li class="card-item not-owned">
+                <li class="card-item<%= card.quantity > 0 ? '' : ' not-owned' %>" data-owned="<%= card.quantity > 0 %>">
                     <a href="/cards/<%= card.id %>">
                         <img src="<%= card.image && card.image !== 'Inconnu' ? card.image + '/high.webp' : '/images/BackCardPokemon.webp' %>"
                             alt="<%= card.name %>" data-type="<%= card.type %>" data-rarity="<%= card.rarity %>"
                             data-set="<%= card.setName %>">
                     </a>
                     <% if (isAuthenticated) { %>
-                        <div class="card-counter" data-card-id="<%= card.id %>">
+                        <div class="card-counter" data-card-id="<%= card.id %>" data-owned="<%= card.quantity || 0 %>">
                             <button class="decrement">-</button>
                             <span class="quantity">
                                 <%= card.quantity || 0 %>

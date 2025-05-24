@@ -5,53 +5,27 @@ import Card from '../model/card';
 // Afficher toutes les cartes d'un set spécifique
 export const showCards = async (req: Request, res: Response) => {
     try {
+
+        // Récupère les cartes et l'utilisateur connecté
         const userId = req.session?.user?.id || null;
-        const ownedOnly = req.path.includes('/mes-cartes'); // ou via un paramètre explicite req.query.ownedOnly
+        const cards = await Card.findAll();
+        const ownedCard = await OwnedCard.findAll({ where: { userId } });
+        const cardsWithOwnership = cards.map(card => {
+            const owned = ownedCard.find(owned => owned.cardId === card.id);
+            return {
+                ...card.get(),
+                quantity: owned ? owned.quantity : 0,
+                setName: card.setName,
+                setLogo: card.setLogo,
+               
+            };
+        });
 
-        // Récupère toutes les cartes (ou seulement celles possédées)
-        let cards: Card[] = [];
-
-        if (ownedOnly) {
-            const ownedCards = await OwnedCard.findAll({ where: { userId } });
-            const cardIds = ownedCards.map(card => card.cardId);
-            cards = await Card.findAll({ where: { id: cardIds } });
-
-            // Ajoute la quantité de possession
-            const cardsWithQuantity = cards.map(card => {
-                const owned = ownedCards.find(o => o.cardId === card.id);
-                return {
-                    ...card.get(),
-                    quantity: owned?.quantity || 0,
-                    setName: card.setName,
-                    setLogo: card.setLogo,
-                };
-            });
-
-            return res.render('ownedCards', {
-                title: 'Mes Cartes',
-                cards: cardsWithQuantity,
-                isAuthenticated: !!req.session.user,
-            });
-        } else {
-            cards = await Card.findAll();
-            const ownedCards = await OwnedCard.findAll({ where: { userId } });
-
-            const cardsWithOwnership = cards.map(card => {
-                const owned = ownedCards.find(o => o.cardId === card.id);
-                return {
-                    ...card.get(),
-                    quantity: owned?.quantity || 0,
-                    setName: card.setName,
-                    setLogo: card.setLogo,
-                };
-            });
-
-            return res.render('cardsList', {
-                title: 'Cartes',
-                cards: cardsWithOwnership,
-                isAuthenticated: !!req.session.user,
-            });
-        }
+        return res.render('cards', {
+            title: 'Cartes',
+            cards: cardsWithOwnership,
+            isAuthenticated: !!req.session.user,
+        });
 
     } catch (error) {
         console.error('Erreur lors de la récupération des cartes :', error);

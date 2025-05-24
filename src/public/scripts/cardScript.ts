@@ -20,31 +20,16 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ==== INITIALISATION DES CARTES POSSEDER ====
-
-  async function highlightOwnedCards() {
-  try {
-    const response = await fetch("/api/user/cards");
-    if (!response.ok) return; 
-
-    const data = await response.json();
-    const ownedIds: string[] = data.ownedCardIds;
-
+  function highlightOwnedCards() {
     allCards.forEach(card => {
-      const cardId = card.getAttribute("data-card-id");
-      if (!cardId) return;
-
-      if (ownedIds.includes(cardId)) {
+      const owned = card.getAttribute('data-owned');
+      if (owned === "true" || owned === "1") {
         card.classList.remove("not-owned");
       } else {
         card.classList.add("not-owned");
       }
     });
-  } catch (error) {
-    console.error("Erreur lors du chargement des cartes possédées :", error);
   }
-}
-  
-
 
   // ==== INITIALISATION DES COMPTEURS ====
   counters.forEach((counter) => {
@@ -75,7 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
       let quantity = parseInt(quantitySpan.textContent || '0', 10);
       quantity++;
       quantitySpan.textContent = quantity.toString();
+      counter.setAttribute('data-owned', quantity > 0 ? "true" : "false");
+      counter.closest('.card-item')?.setAttribute('data-owned', quantity > 0 ? "true" : "false");
       await updateQuantity(cardId, quantity);
+      highlightOwnedCards();
     });
 
     // Décrémente la quantité
@@ -84,7 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (quantity > 0) {
         quantity--;
         quantitySpan.textContent = quantity.toString();
+        counter.setAttribute('data-owned', quantity > 0 ? "true" : "false");
+        counter.closest('.card-item')?.setAttribute('data-owned', quantity > 0 ? "true" : "false");
         await updateQuantity(cardId, quantity);
+        highlightOwnedCards();
       }
     });
   });
@@ -119,8 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function setupSortButtons(buttons: NodeListOf<HTMLButtonElement>) {
     buttons.forEach(button => {
       button.addEventListener("click", () => {
-        buttons.forEach(btn => btn.classList.remove("active")); 
-        button.classList.add("active"); 
+        buttons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
         selectedSort = button.dataset.value!;
         filterAndSortCards();
       });
@@ -227,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
       filterAndSortCards();
     });
 
-    filterAndSortCards(); 
+    filterAndSortCards();
     highlightOwnedCards();
   }
 
