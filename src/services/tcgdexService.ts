@@ -3,7 +3,7 @@ import Card from '../model/card';
 import Set from '../model/set';
 import { updateNullFields } from '../utils/updateNullFields';
 
-const BASE_URL = 'https://api.tcgdex.net/v2/en';
+const BASE_URL = 'https://api.tcgdex.net/v2/fr';
 
 // Récupérer tous les sets disponibles
 export const getAllSets = async () => {

@@ -1,14 +1,19 @@
 import { Request, Response } from 'express';
+import { OAuth2Client } from 'google-auth-library';
 import bcrypt from 'bcrypt';
 import User from '../model/user';
+import jwt from 'jsonwebtoken';
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const jwtSecret = process.env.JWT_SECRET;
 
 // Afficher la page de connexion
 export const showLogin = (req: Request, res: Response) => {
     res.render('login', { title: 'Connexion' });
 };
 
-// Traiter la connexion
-export const login = async (req: Request, res: Response) => {
+// Traiter la connexion local
+export const localLogin = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
@@ -20,12 +25,16 @@ export const login = async (req: Request, res: Response) => {
             });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.render('login', {
-                title: 'Connexion',
-                errorMessage: 'Email ou mot de passe incorrect.',
-            });
+        // Vérifier le mot de passe
+
+        if (user.password !== null) {
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                return res.render('login', {
+                    title: 'Connexion',
+                    errorMessage: 'Email ou mot de passe incorrect.',
+                });
+            }
         }
 
         // Stocker l'utilisateur dans la session
@@ -90,6 +99,55 @@ export const register = async (req: Request, res: Response) => {
         res.status(500).render('register', {
             title: 'Inscription',
             errorMessage: 'Une erreur est survenue lors de la création de votre compte. Veuillez réessayer.',
+        });
+    }
+}
+
+export const googleLogin = async (req: Request, res: Response) => {
+    const { idToken } = req.body;
+    try {
+        if (!client || !jwtSecret) {
+            throw new Error('GOOGLE_CLIENT_ID or JWT_SECRET is not defined in environment variables.');
+        }
+
+        // Vérifie le token
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID!, 
+        });
+
+        const payload = ticket.getPayload();
+
+        if (!payload) return res.status(400).json({ error: 'Token invalide' });
+
+        const { sub: googleId, email, name } = payload;
+
+        if (!email || !name) {
+        return res.status(400).json({ error: 'Informations Google incomplètes.' });
+}
+        // Vérifie si l'utilisateur existe
+        let user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            // Crée un utilisateur
+            user = await User.create({
+                email,
+                username: name,
+                googleId,
+                provider: 'google',
+            });
+        }
+        const token = jwt.sign({ userId: user.id }, jwtSecret!, {
+            expiresIn: '7d',
+        });
+
+        res.json({ token, user });
+
+    } catch (error) {
+        console.error('Erreur lors de la connexion Google :', error);
+        res.status(500).render('login', {
+            title: 'Connexion',
+            errorMessage: 'Une erreur est survenue lors de la connexion avec Google. Veuillez réessayer.',
         });
     }
 };

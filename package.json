@@ -18,6 +18,7 @@
     "license": "ISC",
     "devDependencies": {
         "@types/express-session": "^1.18.1",
+        "@types/jsonwebtoken": "^9.0.9",
         "@types/node": "^20.0.0",
         "@types/passport": "^1.0.17",
         "@types/passport-google-oauth20": "^2.0.16",
@@ -34,6 +35,8 @@
         "ejs": "^3.1.10",
         "express": "^5.1.0",
         "express-session": "^1.18.1",
+        "google-auth-library": "^9.15.1",
+        "jsonwebtoken": "^9.0.2",
         "node-cron": "^3.0.3",
         "passport": "^0.7.0",
         "passport-google-oauth20": "^2.0.0",
