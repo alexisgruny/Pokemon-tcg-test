@@ -142,6 +142,10 @@ export const googleLogin = async (req: Request, res: Response) => {
         });
 
         res.json({ token, user });
+        res.render('registerSuccess', {
+            title: 'Inscription réussie',
+            user
+        });
 
     } catch (error) {
         console.error('Erreur lors de la connexion Google :', error);

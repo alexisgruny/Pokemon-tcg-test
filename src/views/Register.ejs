@@ -7,6 +7,7 @@
     <title>
         <%= title %>
     </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/navbar.css">
     <link rel="stylesheet" href="/styles/footer.css">
@@ -17,6 +18,8 @@
     <%- include('partials/navbar') %>
 
         <h1>Formulaire d'inscription</h1>
+
+        <a href="/auth/login/google"><button id="gmail" ><i class="fab fa-google"></i></button></a>
         <form action="/auth/register" method="POST">
             <div>
                 <label for="username">Nom d'utilisateur : </label><br>
@@ -36,14 +39,6 @@
                 <label for="confirmPassword">Confirmer le mot de passe : </label><br>
                 <input type="password" id="confirmPassword" name="confirmPassword" required>
                 <div id="passwordVerification"></div>
-            </div>
-            <div>
-                <label for="inGameName">Nom en jeu : </label><br>
-                <input type="text" id="inGameName" name="inGameName" required>
-            </div>
-            <div>
-                <label for="friendCode">Code ami : </label><br>
-                <input type="text" id="friendCode" name="friendCode" maxlength="14" required>
             </div>
             <button type="submit">S'inscrire</button>
         </form>

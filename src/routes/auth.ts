@@ -9,7 +9,11 @@ const router = Router();
 // Routes pour l'authentification
 router.get('/login', showLogin);
 router.post('/login', localLogin);
-router.post('/login/google', googleLogin);
+router.get('/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback', passport.authenticate('google', {
+  successRedirect: '/cards/list',
+  failureRedirect: '/auth/login'
+}));
 router.get('/logout', isAuthenticated, logout);
 router.get('/register', showRegister);
 router.post('/register', register);
