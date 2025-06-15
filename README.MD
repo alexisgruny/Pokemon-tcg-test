@@ -17,7 +17,7 @@ Elle permet de collecter, stocker et manipuler des cartes Pokémon dans une coll
 - Node.js
 - Express.js
 - TypeScript
-- MongoDB (avec Mongoose)
+- postgreSQL (Sequelize)
 - Axios (pour les appels à l'API externe)
 
 ## 📦 Installation
