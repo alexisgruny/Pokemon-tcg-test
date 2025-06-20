@@ -5,7 +5,7 @@ const router = Router();
 
 // Routes pour Afficher les cartes
 router.get('/list', showCards);
-router.get('/:id', showCardDetails);
+router.get('/id/:id', showCardDetails);
 
 // Routes pour ajouter, modifier et supprimer une carte
 router.post('/addOrUpdate', addOrUpdateCard);

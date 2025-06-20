@@ -10,7 +10,7 @@ router.get('/search', searchUser);
 router.get('/list', showRandomUsers);
 
 // Route pour afficher le profil d'un utilisateur
-router.get('/:username', showUserProfile);
+router.get('/username/:username', showUserProfile);
 
 
 

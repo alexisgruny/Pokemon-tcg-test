@@ -2,26 +2,25 @@ import { Request, Response } from 'express';
 import OwnedCard from '../model/ownedCard';
 import Card from '../model/card';
 
-// Afficher toutes les cartes d'un set spécifique
+// === Affiche toutes les cartes avec informations de possession (pour un utilisateur connecté) ===
 export const showCards = async (req: Request, res: Response) => {
     try {
-
-        // Récupère les cartes et l'utilisateur connecté
         const userId = req.session?.user?.id || null;
         const cards = await Card.findAll();
-        const ownedCard = await OwnedCard.findAll({ where: { userId } });
+        const ownedCards = await OwnedCard.findAll({ where: { userId } });
+
+        // Associe les quantités possédées aux cartes
         const cardsWithOwnership = cards.map(card => {
-            const owned = ownedCard.find(owned => owned.cardId === card.id);
+            const owned = ownedCards.find(oc => oc.cardId === card.id);
             return {
                 ...card.get(),
                 quantity: owned ? owned.quantity : 0,
                 setName: card.setName,
                 setLogo: card.setLogo,
-               
             };
         });
 
-        return res.render('cards', {
+        res.render('cards', {
             title: 'Cartes',
             cards: cardsWithOwnership,
             isAuthenticated: !!req.session.user,
@@ -33,43 +32,39 @@ export const showCards = async (req: Request, res: Response) => {
     }
 };
 
-// Afficher les détails d'une carte spécifique
+// === Affiche les détails d'une carte spécifique ===
 export const showCardDetails = async (req: Request, res: Response) => {
     try {
         const cardId = req.params.id;
-
-        // Récupère les détails de la carte depuis la base de données
         const card = await Card.findByPk(cardId);
 
         if (!card) {
-            return res.status(404).send('Carte non trouvée.');
+            return res.status(404).send('Carte non trouvée');
         }
 
-        res.render('cardDetail', {
-            title: `Détail de ${card.name}`,
-            name: card.name,
-            image: card.image,
-            localId: card.localId,
-            description: card.description,
-            setLogo: card.setLogo,
-            illustrator: card.illustrator,
-            rarity: card.rarity,
-            setId: card.setId,
-            type: card.type,
-            isAuthenticated: req.session.user ? true : false,
+        res.render('cardDetails', {
+            title: card.name,
+            card,
+            isAuthenticated: !!req.session.user,
         });
+
     } catch (error) {
         console.error('Erreur lors de la récupération des détails de la carte :', error);
-        res.status(500).send('Erreur serveur.');
+        res.status(500).send('Erreur interne');
     }
 };
 
-export const addOrUpdateCard = async (req: Request, res: Response): Promise<Response | void> => {
+// === Ajouter ou mettre à jour une carte possédée ===
+export const addOrUpdateCard = async (req: Request, res: Response) => {
     try {
-        const { cardId, quantity } = req.body;
+        const { cardId, quantity } = req.body as { cardId: string; quantity: number };
 
         if (!req.session.user) {
-            return res.status(401).json({ message: 'Non autorisé' });
+            return res.status(401).send('Non autorisé');
+        }
+
+        if (!cardId || typeof quantity !== 'number' || quantity < 0) {
+            return res.status(400).json({ message: 'Données invalides' });
         }
 
         const userId = req.session.user.id;
@@ -83,9 +78,85 @@ export const addOrUpdateCard = async (req: Request, res: Response): Promise<Resp
             await OwnedCard.create({ userId, cardId, quantity });
         }
 
-        return res.status(200).json({ message: 'Carte mise à jour avec succès.' });
+        res.status(200).json({ message: 'Carte mise à jour' });
+
     } catch (error) {
-        console.error('Erreur lors de l\'ajout ou de la mise à jour de la carte :', error);
-        return res.status(500).json({ message: 'Erreur lors de la mise à jour de la carte.' });
+        console.error("Erreur add/update carte :", error);
+        res.status(500).json({ message: 'Erreur interne' });
+    }
+};
+
+// === Supprimer une carte possédée ===
+export const removeCard = async (req: Request, res: Response) => {
+    try {
+        const { cardId } = req.body;
+
+        if (!req.session.user) {
+            return res.status(401).send('Non autorisé');
+        }
+
+        await OwnedCard.destroy({ where: { userId: req.session.user.id, cardId } });
+        res.status(200).json({ message: 'Carte supprimée' });
+
+    } catch (error) {
+        console.error("Erreur suppression carte :", error);
+        res.status(500).json({ message: 'Erreur interne' });
+    }
+};
+
+// === Filtrer les cartes possédées par set ou nom ===
+export const filterOwnedCards = async (req: Request, res: Response) => {
+    try {
+        const { setName, name } = req.query;
+        const userId = req.session?.user?.id;
+
+        if (!userId) {
+            return res.status(401).send('Non autorisé');
+        }
+
+        const ownedCards = await OwnedCard.findAll({ where: { userId } });
+        const cardIds = ownedCards.map(card => card.cardId);
+
+        let whereClause: any = { id: cardIds };
+        if (setName) whereClause.setName = setName;
+        if (name) whereClause.name = { $iLike: `%${name}%` }; // `$iLike` selon le dialecte Sequelize
+
+        const cards = await Card.findAll({ where: whereClause });
+
+        res.render('cards', {
+            title: 'Filtrage',
+            cards,
+            isAuthenticated: !!req.session.user,
+        });
+
+    } catch (error) {
+        console.error('Erreur filtrage cartes possédées :', error);
+        res.status(500).send('Erreur interne');
+    }
+};
+
+// === Filtrer toutes les cartes (collection complète) ===
+export const filterAllCards = async (req: Request, res: Response) => {
+    try {
+        const { name, setName, type, rarity } = req.query;
+
+        let whereClause: any = {};
+
+        if (name) whereClause.name = { $iLike: `%${name}%` };
+        if (setName) whereClause.setName = setName;
+        if (type) whereClause.types = { $contains: [type] }; // Si 'types' est un tableau
+        if (rarity) whereClause.rarity = rarity;
+
+        const cards = await Card.findAll({ where: whereClause });
+
+        res.render('cards', {
+            title: 'Résultats filtrés',
+            cards,
+            isAuthenticated: !!req.session.user,
+        });
+
+    } catch (error) {
+        console.error("Erreur lors du filtrage des cartes :", error);
+        res.status(500).send('Erreur lors du filtrage des cartes.');
     }
 };
