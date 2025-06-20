@@ -3,33 +3,28 @@ import OwnedCard from '../model/ownedCard';
 import Card from '../model/card';
 
 // === Affiche toutes les cartes avec informations de possession (pour un utilisateur connecté) ===
-export const showCards = async (req: Request, res: Response) => {
-    try {
-        const userId = req.session?.user?.id || null;
-        const cards = await Card.findAll();
-        const ownedCards = await OwnedCard.findAll({ where: { userId } });
+export const getCardsApi = async (req: Request, res: Response) => {
+  try {
+    const userId = req.session?.user?.id || null;
+    const cards = await Card.findAll();
+    const ownedCards = await OwnedCard.findAll({ where: { userId } });
 
-        // Associe les quantités possédées aux cartes
-        const cardsWithOwnership = cards.map(card => {
-            const owned = ownedCards.find(oc => oc.cardId === card.id);
-            return {
-                ...card.get(),
-                quantity: owned ? owned.quantity : 0,
-                setName: card.setName,
-                setLogo: card.setLogo,
-            };
-        });
+    const cardsWithOwnership = cards.map(card => {
+      const owned = ownedCards.find(oc => oc.cardId === card.id);
+      return {
+        ...card.get(),
+        quantity: owned ? owned.quantity : 0,
+        setName: card.setName,
+        setLogo: card.setLogo,
+      };
+    });
 
-        res.render('cards', {
-            title: 'Cartes',
-            cards: cardsWithOwnership,
-            isAuthenticated: !!req.session.user,
-        });
+    res.json({ cards: cardsWithOwnership });
 
-    } catch (error) {
-        console.error('Erreur lors de la récupération des cartes :', error);
-        res.status(500).send('Erreur lors de la récupération des cartes.');
-    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération des cartes :', error);
+    res.status(500).json({ error: 'Erreur lors de la récupération des cartes.' });
+  }
 };
 
 // === Affiche les détails d'une carte spécifique ===

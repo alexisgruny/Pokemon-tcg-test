@@ -17,11 +17,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar bg-gray-800 text-white px-4 py-3 shadow">
+    <nav className="navbar">
       <ul className="flex gap-6">
         <li><Link to="/">Accueil</Link></li>
-        <li><Link to="/cards">Cartes</Link></li>
-        <li><Link to="/users">Utilisateurs</Link></li>
+        <li><Link to="/Cards">Cartes</Link></li>
+        <li><Link to="/Users">Utilisateurs</Link></li>
         {isAuthenticated ? (
           <>
             <li><Link to="/profile">Mon profil</Link></li>
@@ -29,8 +29,8 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <li><Link to="/login">Connexion</Link></li>
-            <li><Link to="/register">Inscription</Link></li>
+            <li><Link to="/Login">Connexion</Link></li>
+            <li><Link to="/Register">Inscription</Link></li>
           </>
         )}
       </ul>

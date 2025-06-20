@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Layout from '../components/Layout';
 
 interface User {
   username: string;
@@ -61,6 +62,7 @@ const Profile = () => {
   }
 
   return (
+    <Layout>
     <div className="max-w-lg mx-auto mt-10 p-6 border rounded-xl shadow">
       <h1 className="text-2xl font-bold mb-4">Profil de {user.username}</h1>
 
@@ -69,6 +71,7 @@ const Profile = () => {
       <p><strong>Nom en jeu :</strong> {user.inGameName || 'Non renseigné'}</p>
       <p><strong>Code ami :</strong> {user.friendCode || 'Non renseigné'}</p>
     </div>
+    </Layout>
   );
 };
 

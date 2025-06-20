@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Layout from '../components/Layout';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -40,6 +41,7 @@ const Register = () => {
   };
 
   return (
+    <Layout>
     <div className="max-w-md mx-auto mt-10 p-6 border rounded-xl shadow">
       <h1 className="text-2xl font-bold mb-4">Inscription</h1>
 
@@ -105,6 +107,7 @@ const Register = () => {
         </a>
       </p>
     </div>
+    </Layout>
   );
 };
 

@@ -1,21 +1,14 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "target": "ES6",                 // ou une autre version de JavaScript
-    "module": "commonjs",            // ou "es6" en fonction de ton environnement
+    "target": "ES6",
+    "module": "CommonJS",
+    "rootDir": "./",
+    "outDir": "../dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",              // Le répertoire de sortie pour les fichiers compilés
-    "rootDir": "./src",              // Le répertoire source de ton code TS
-    "baseUrl": "./",                 // Assure-toi que le chemin est correct
-    "resolveJsonModule": true,
-    "typeRoots": [
-       "./src/types", 
-       "./node_modules/@types" 
-     ]
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*", "src/views/**/*", "frontend/src/pages"],      // Inclut tous les fichiers .ts sous "src"
-  "exclude": ["node_modules", "dist"], // Exclut les répertoires de compilation
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", "../frontend", "../dist"]
 }
