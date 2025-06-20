@@ -16,7 +16,7 @@ const Cards = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/cards/list')
+    fetch('api/cards/list')
       .then(res => res.json())
       .then(data => {
         setCards(data.cards);
@@ -40,11 +40,6 @@ const Cards = () => {
               data-set={card.setName}
             />
           </a>
-          <div className="card-counter" data-card-id={card.id} data-owned={card.quantity || 0}>
-            <button className="decrement">-</button>
-            <span className="quantity">{card.quantity || 0}</span>
-            <button className="increment">+</button>
-          </div>
         </li>
       ))}
     </ul>

@@ -5,11 +5,34 @@ import { updateNullFields } from '../utils/updateNullFields';
 
 const BASE_URL = 'https://api.tcgdex.net/v2/fr';
 
+interface TCGDexCard {
+  id: string;
+  localId: string;
+  description?: string;
+  name: string;
+  image?: string;
+  types?: string[];
+  category: string;
+  rarity: string;
+  illustrator?: string;
+}
+
+interface TCGDexCardSummary {
+  id: string;
+}
+
+interface TCGDexSet {
+  id: string;
+  name: string;
+  logo?: string;
+  cards: TCGDexCardSummary[];
+}
+
 // Récupérer tous les sets disponibles
 export const getAllSets = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/series/tcgp`);
-        return response.data.sets;
+        const response = await axios.get<{ sets: TCGDexSet[] }>(`${BASE_URL}/series/tcgp`);
+    return response.data.sets;
     } catch (error: any) {
         console.error('Erreur lors de la récupération des sets :', error.message);
         throw error;
@@ -51,7 +74,7 @@ export const syncCardsFromApi = async () => {
         // Pour chaque set, récupère les cartes depuis l'API et les insère/majeure dans la base
         for (const set of sets) {
             const setId = set.id;
-            const response = await axios.get(`${BASE_URL}/sets/${setId}`);
+            const response = await axios.get<{ cards: TCGDexCard[] }>(`${BASE_URL}/sets/${setId}`);
             const setData = response.data;
             const cards = setData.cards;
 
@@ -62,7 +85,7 @@ export const syncCardsFromApi = async () => {
                 // Si la carte n'existe pas, on récupère les détails de la carte depuis l'API
                 if (!existingCard) {
                     const detailedResponse = await axios.get(`${BASE_URL}/cards/${card.id}`);
-                    const detailedCard = detailedResponse.data;
+                    const detailedCard = detailedResponse.data as TCGDexCard;
 
                     // Insertion ou mise à jour de la carte dans la base
                     await Card.upsert({
@@ -83,7 +106,7 @@ export const syncCardsFromApi = async () => {
                 } else {
                     // Si la carte existe, on compare et met à jour les champs non nuls
                     const detailedResponse = await axios.get(`${BASE_URL}/cards/${card.id}`);
-                    const detailedCard = detailedResponse.data;
+                    const detailedCard = detailedResponse.data as TCGDexCard;
 
                     const updatedFields = updateNullFields(existingCard.get(), {
                         localId: detailedCard.localId,

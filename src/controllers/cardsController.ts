@@ -5,21 +5,9 @@ import Card from '../model/card';
 // === Affiche toutes les cartes avec informations de possession (pour un utilisateur connecté) ===
 export const getCardsApi = async (req: Request, res: Response) => {
   try {
-    const userId = req.session?.user?.id || null;
     const cards = await Card.findAll();
-    const ownedCards = await OwnedCard.findAll({ where: { userId } });
 
-    const cardsWithOwnership = cards.map(card => {
-      const owned = ownedCards.find(oc => oc.cardId === card.id);
-      return {
-        ...card.get(),
-        quantity: owned ? owned.quantity : 0,
-        setName: card.setName,
-        setLogo: card.setLogo,
-      };
-    });
-
-    res.json({ cards: cardsWithOwnership });
+    res.json({ cards });
 
   } catch (error) {
     console.error('Erreur lors de la récupération des cartes :', error);

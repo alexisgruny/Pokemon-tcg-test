@@ -7,8 +7,20 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".", // doit pointer à la racine du projet
+    "paths": {
+      "src/*": [
+        "./src/*"
+      ] // alias pour que 'src/' fonctionne partout
+    },
   },
-  "include": ["./**/*.ts"],
-  "exclude": ["node_modules", "../frontend", "../dist"]
+  "include": [
+    "./**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "../frontend",
+    "../dist"
+  ]
 }

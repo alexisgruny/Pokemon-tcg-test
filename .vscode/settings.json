@@ -1,0 +1,19 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true
+  },
+  "folders": [
+    {
+      "path": "src"
+    },
+    {
+      "path": "frontend"
+    }
+  ],
+  "settings": {
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.tsserver.experimental.enableProjectDiagnostics": true
+  }
+}
