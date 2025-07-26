@@ -6,6 +6,7 @@ import Card from '../model/card';
 export const getCardsApi = async (req: Request, res: Response) => {
   try {
     const cards = await Card.findAll();
+    console.log('Route /api/cards/list appelé');
 
     res.json({ cards });
 

@@ -1,9 +1,18 @@
-import { Session } from 'express-session';
-import userAttributes from '../models/userAttributes';
+import 'express-session';
 
-// Déclare un module pour étendre l'interface Session d'Express
 declare module 'express-session' {
-  interface Session {
-    user: userAttributes;
+  interface SessionData {
+    user?: {
+      id: number;
+      username: string;
+      email: string;
+      password?: string | null;
+      friendCode: string | null;
+      inGameName: string | null;
+      googleId?: string;
+      provider?: 'google' | 'local';
+      createdAt?: Date;
+      updatedAt?: Date;
+    };
   }
 }

@@ -19,6 +19,6 @@ async function startServer() {
         console.error('Erreur de connexion ou de synchronisation:', error);
         process.exit(1);
     }
-}
+} 
 
 startServer();

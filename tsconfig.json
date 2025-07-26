@@ -8,16 +8,15 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".", // doit pointer à la racine du projet
+    "baseUrl": ".", 
     "paths": {
       "src/*": [
         "./src/*"
-      ] // alias pour que 'src/' fonctionne partout
+      ] 
     },
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   },
-  "include": [
-    "./**/*.ts"
-  ],
+  "include": [ "src/types/**/*", "src/**/*"],
   "exclude": [
     "node_modules",
     "../frontend",
