@@ -56,7 +56,7 @@ User.init(
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true, // Allow null for Google OAuth users
             validate: {
                 len: [8, 100],
             },

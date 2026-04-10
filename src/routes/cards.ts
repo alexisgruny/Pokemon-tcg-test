@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getCardsApi, showCardDetails, addOrUpdateCard } from '../controllers/cardsController';
+import { isAuthenticated } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -7,7 +8,7 @@ const router = Router();
 router.get('/list', getCardsApi);
 router.get('/id/:id', showCardDetails);
 
-// Routes pour ajouter, modifier et supprimer une carte
-router.post('/addOrUpdate', addOrUpdateCard);
+// Routes pour ajouter, modifier et supprimer une carte (authentifiées)
+router.post('/addOrUpdate', isAuthenticated, addOrUpdateCard);
 
 export default router;

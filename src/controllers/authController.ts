@@ -63,12 +63,29 @@ export const register = async (req: Request, res: Response) => {
     try {
         const { username, email, password, inGameName, friendCode } = req.body as RegisterBody;
 
+        // Validation des champs requis
+        if (!username || !email || !password || !inGameName || !friendCode) {
+            return res.status(400).json({
+                success: false,
+                message: 'Tous les champs sont obligatoires.',
+            });
+        }
+
+        // Validation de la complexité du mot de passe
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.',
+            });
+        }
+
         // Vérifie si l'email est déjà utilisé
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
-            return res.render('register', {
-                title: 'Inscription',
-                errorMessage: 'Cet email est déjà utilisé.',
+            return res.status(409).json({
+                success: false,
+                message: 'Cet email est déjà utilisé.',
             });
         }
 
@@ -83,12 +100,15 @@ export const register = async (req: Request, res: Response) => {
             inGameName,
         });
 
-        res.redirect('/auth/login');
+        return res.status(201).json({
+            success: true,
+            message: 'Inscription réussie. Veuillez vous connecter.',
+        });
     } catch (error) {
         console.error("Erreur lors de l'inscription :", error);
-        res.status(500).render('register', {
-            title: 'Inscription',
-            errorMessage: 'Une erreur est survenue lors de la création de votre compte. Veuillez réessayer.',
+        return res.status(500).json({
+            success: false,
+            message: 'Une erreur est survenue lors de la création de votre compte.',
         });
     }
 };
@@ -108,19 +128,28 @@ export const googleLogin = async (req: Request, res: Response) => {
 
         const { sub: googleId, email, name } = payload;
 
+        // Validation des données Google
+        if (!email || !name || !googleId) {
+            return res.status(400).json({ error: 'Informations Google incomplètes.' });
+        }
+
         // Cherche l'utilisateur existant
         let user = await User.findOne({ where: { email } });
 
         // Crée l'utilisateur si inexistant
         if (!user) {
-            if (!email || !name || !googleId) {
-                return res.status(400).json({ error: 'Informations Google incomplètes.' });
-            }
+            // Génère un friendCode et inGameName par défaut pour Google OAuth
+            const friendCode = `${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+            const inGameName = name.substring(0, 20);
+
             user = await User.create({
                 email,
                 username: name,
                 googleId,
                 provider: 'google',
+                friendCode,
+                inGameName,
+                password: null, // Google OAuth users don't have passwords
             });
         }
 

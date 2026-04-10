@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import sessionMiddleware from './config/session';
 import { errorHandler } from './middlewares/errorHandler';
+import { apiLimiter } from './middlewares/rateLimiter';
 import './model/association';
 import sequelize from './config/db';
 
@@ -21,8 +22,11 @@ const app = express();
 const cron = require('./cronJobs');
 
 // Middlewares globaux
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Rate limiting global
+app.use(apiLimiter);
 
 // Middleware de session
 app.use(sessionMiddleware);
