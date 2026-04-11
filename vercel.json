@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build && cd frontend && npm run build",
+  "builds": [
+    {
+      "src": "dist/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["dist/**", "frontend/dist/**"]
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "dist/index.js" }
+  ]
+}

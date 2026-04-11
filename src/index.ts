@@ -5,15 +5,17 @@ const PORT = process.env.PORT || 3000;
 
 async function startServer() {
     try {
-        // Connexion à la base de données
-        await sequelize.authenticate(); 
-        await sequelize.sync({ force: false }); 
+        await sequelize.authenticate();
         console.log('Connexion à la base de données réussie.');
 
-        // Démarre le serveur
+        // sync uniquement en dev pour créer/modifier les tables
+        if (process.env.NODE_ENV !== 'production') {
+            await sequelize.sync({ force: false });
+        }
+
         app.listen(PORT, () => {
             console.log(`Serveur démarré sur http://localhost:${PORT}`);
-        }); 
+        });
     } catch (error) {
         console.error('Erreur de connexion ou de synchronisation:', error);
         process.exit(1);
