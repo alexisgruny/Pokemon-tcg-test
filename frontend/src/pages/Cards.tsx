@@ -1,44 +1,51 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
+import apiService from '../services/api';
 
 interface Card {
-  id: number;
+  id: string;
   name: string;
   image: string;
   type: string;
   rarity: string;
   setName: string;
-  quantity: number;
 }
 
 const Cards = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/cards/list')
-      .then(res => {
-        if (!res.ok) throw new Error('Erreur de réponse du serveur');
-        return res.json();
-      })
-      .then(data => {
-        setCards(data.cards);
-        setLoading(false);
-      })
-      .catch(err => {
+    const fetchCards = async () => {
+      try {
+        const response = await apiService.getCards();
+        if (response.success && response.data) {
+          setCards(response.data);
+        } else {
+          setError(response.error || 'Erreur lors du chargement des cartes');
+        }
+      } catch (err) {
         console.error("Erreur lors du fetch des cartes :", err);
+        setError('Erreur réseau');
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchCards();
   }, []);
-console.log(cards);
-  if (loading) return <div>Chargement...</div>;
+
+  if (loading) return <div className="p-4">Chargement...</div>;
+  if (error) return <div className="p-4 text-red-500">Erreur: {error}</div>;
 
   return (
     <Layout>
-      <ul className="cards-container">
+      <ul className="grid-view">
         {cards.map(card => (
-          <li key={card.id} className={`card-item ${card.quantity > 0 ? '' : 'not-owned'}`}>
-            <a href={`/cards/${card.id}`}>
+          <li key={card.id} className="card-item">
+            <Link to={`/cards/${card.id}`}>
               <img
                 src={card.image && card.image !== 'Inconnu' ? `${card.image}/high.webp` : '/images/BackCardPokemon.webp'}
                 alt={card.name}
@@ -46,7 +53,7 @@ console.log(cards);
                 data-rarity={card.rarity}
                 data-set={card.setName}
               />
-            </a>
+            </Link>
           </li>
         ))}
       </ul>

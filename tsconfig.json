@@ -1,25 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2020",
     "module": "CommonJS",
     "rootDir": "./",
-    "outDir": "../dist",
+    "outDir": "./dist",
     "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".", 
-    "paths": {
-      "src/*": [
-        "./src/*"
-      ] 
-    },
-    "typeRoots": ["./src/types", "./node_modules/@types"]
+    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false,
+    "lib": ["ES2020"]
   },
-  "include": [ "src/types/**/*", "src/**/*"],
-  "exclude": [
-    "node_modules",
-    "../frontend",
-    "../dist"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "frontend"]
 }

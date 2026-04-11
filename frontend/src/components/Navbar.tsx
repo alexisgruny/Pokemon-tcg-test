@@ -20,6 +20,7 @@ const Navbar = () => {
     <nav className="navbar">
       <ul className="flex gap-6">
         <li><Link to="/">Accueil</Link></li>
+        <li><Link to="/sets">Sets</Link></li>
         <li><Link to="/Cards">Cartes</Link></li>
         <li><Link to="/Users">Utilisateurs</Link></li>
         {isAuthenticated ? (

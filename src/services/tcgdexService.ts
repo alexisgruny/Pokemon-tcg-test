@@ -1,138 +1,176 @@
 import axios from 'axios';
 import Card from '../model/card';
-import Set from '../model/set';
-import { updateNullFields } from '../utils/updateNullFields';
+import PokemonSet from '../model/set';
 
 const BASE_URL = 'https://api.tcgdex.net/v2/fr';
 
 interface TCGDexCard {
-  id: string;
-  localId: string;
-  description?: string;
-  name: string;
-  image?: string;
-  types?: string[];
-  category: string;
-  rarity: string;
-  illustrator?: string;
+    id: string;
+    localId: string;
+    description?: string;
+    name: string;
+    image?: string;
+    types?: string[];
+    category: string;
+    rarity: string;
+    illustrator?: string;
 }
 
 interface TCGDexCardSummary {
-  id: string;
+    id: string;
 }
 
 interface TCGDexSet {
-  id: string;
-  name: string;
-  logo?: string;
-  cards: TCGDexCardSummary[];
+    id: string;
+    name: string;
+    logo?: string;
+    cards: TCGDexCardSummary[];
 }
 
-// Récupérer tous les sets disponibles
-export const getAllSets = async () => {
-    try {
-        const response = await axios.get<{ sets: TCGDexSet[] }>(`${BASE_URL}/series/tcgp`);
+// Récupérer tous les sets de la série TCGP
+export const getAllSets = async (): Promise<TCGDexSet[]> => {
+    const response = await axios.get<{ sets: TCGDexSet[] }>(`${BASE_URL}/series/tcgp`);
     return response.data.sets;
-    } catch (error: any) {
-        console.error('Erreur lors de la récupération des sets :', error.message);
-        throw error;
-    }
 };
 
-// Synchroniser les sets depuis l'API vers la base de données   
-export const syncSetsFromApi = async () => {
-    try {
-        const sets = await getAllSets();
-        for (const set of sets) {
-            // Vérifie si le set existe déjà dans la base de données
-            const existingSet = await Set.findOne({ where: { id: set.id } });
-            
-            // Si le set n'existe pas, on l'insère dans la base de données
-            if (!existingSet) {
-                await Set.upsert({
-                    id: set.id,
-                    name: set.name,
-                    logo: set.logo,
+// Synchroniser les sets — upsert systématique pour attraper les nouveaux sets
+export const syncSetsFromApi = async (): Promise<{ added: number; updated: number }> => {
+    const sets = await getAllSets();
+    let added = 0;
+    let updated = 0;
+
+    for (const set of sets) {
+        const existing = await PokemonSet.findByPk(set.id);
+        if (!existing) {
+            await PokemonSet.create({ id: set.id, name: set.name, logo: set.logo ?? null });
+            console.log(`[Sync] Set ajouté : ${set.name}`);
+            added++;
+        } else if (existing.name !== set.name) {
+            await existing.update({ name: set.name });
+            console.log(`[Sync] Set mis à jour : ${set.name}`);
+            updated++;
+        }
+    }
+
+    console.log(`[Sync] Sets — ${added} ajoutés, ${updated} mis à jour`);
+    return { added, updated };
+};
+
+// Synchroniser les cartes — ne fetch les détails que pour les nouvelles cartes
+export const syncCardsFromApi = async (): Promise<{ added: number; skipped: number }> => {
+    const sets = await PokemonSet.findAll();
+    let added = 0;
+    let skipped = 0;
+
+    for (const set of sets) {
+        let setData: { cards: TCGDexCardSummary[] };
+        try {
+            const response = await axios.get<{ cards: TCGDexCardSummary[] }>(
+                `${BASE_URL}/sets/${set.id}`
+            );
+            setData = response.data;
+        } catch (err) {
+            console.error(`[Sync] Impossible de récupérer le set ${set.id}`, err);
+            continue;
+        }
+
+        const cardSummaries = setData.cards ?? [];
+
+        // Récupère les IDs déjà en DB pour ce set en une seule requête
+        const existingCards = await Card.findAll({
+            where: { setId: set.id },
+            attributes: ['id'],
+        });
+        const existingIds = new global.Set(existingCards.map(c => c.id));
+
+        // Ne traite que les cartes absentes de la DB
+        const newCardSummaries = cardSummaries.filter(c => !existingIds.has(c.id));
+
+        if (newCardSummaries.length === 0) {
+            console.log(`[Sync] Set ${set.id} — aucune nouvelle carte`);
+            skipped += cardSummaries.length;
+            continue;
+        }
+
+        console.log(`[Sync] Set ${set.id} — ${newCardSummaries.length} nouvelles cartes à importer`);
+
+        for (const summary of newCardSummaries) {
+            try {
+                const { data: card } = await axios.get<TCGDexCard>(
+                    `${BASE_URL}/cards/${summary.id}`
+                );
+
+                await Card.create({
+                    id: card.id,
+                    localId: card.localId,
+                    description: card.description ?? 'Inconnu',
+                    name: card.name,
+                    image: card.image ?? 'Inconnu',
+                    type: card.types ? card.types.join(', ') : 'Inconnu',
+                    category: card.category,
+                    rarity: card.rarity,
+                    setId: set.id,
+                    setName: set.name,
+                    setLogo: set.logo ?? 'Inconnu',
+                    illustrator: card.illustrator ?? 'Inconnu',
                 });
-                console.log(`Set ${set.name} ajouté avec succès.`);
-            } else {
-                console.log(`Le set ${set.name} existe déjà.`);
+
+                console.log(`[Sync] Carte ajoutée : ${card.name} (${card.id})`);
+                added++;
+            } catch (err) {
+                console.error(`[Sync] Erreur sur la carte ${summary.id}`, err);
             }
         }
-        console.log('Sets synchronisés avec succès.');
-    } catch (error) {
-        console.error('Erreur lors de la synchronisation des sets :', error);
+
+        skipped += existingIds.size as number;
     }
-}
 
-// Synchroniser les cartes d'un set depuis l'API vers la base de données
-export const syncCardsFromApi = async () => {
-    try {
-        // Récupère tous les sets depuis la base de données
-        const sets = await Set.findAll();
+    console.log(`[Sync] Cartes — ${added} ajoutées, ${skipped} déjà présentes`);
+    return { added, skipped };
+};
 
-        // Pour chaque set, récupère les cartes depuis l'API et les insère/majeure dans la base
-        for (const set of sets) {
-            const setId = set.id;
-            const response = await axios.get<{ cards: TCGDexCard[] }>(`${BASE_URL}/sets/${setId}`);
-            const setData = response.data;
-            const cards = setData.cards;
+// Répare les cartes avec des champs manquants (image, type, etc. = 'Inconnu')
+export const fixMissingCardData = async (): Promise<{ fixed: number; failed: number }> => {
+    const { Op } = require('sequelize');
+    const incompleteCards = await Card.findAll({
+        where: {
+            image: { [Op.or]: ['Inconnu', null] },
+        },
+    });
 
-            // Pour chaque carte, on vérifie si elle existe déjà dans la base
-            for (const card of cards) {
-                const existingCard = await Card.findOne({ where: { id: card.id } });
+    console.log(`[Fix] ${incompleteCards.length} cartes avec des données manquantes`);
+    let fixed = 0;
+    let failed = 0;
 
-                // Si la carte n'existe pas, on récupère les détails de la carte depuis l'API
-                if (!existingCard) {
-                    const detailedResponse = await axios.get(`${BASE_URL}/cards/${card.id}`);
-                    const detailedCard = detailedResponse.data as TCGDexCard;
+    for (const card of incompleteCards) {
+        try {
+            const { data } = await axios.get<TCGDexCard>(`${BASE_URL}/cards/${card.id}`);
 
-                    // Insertion ou mise à jour de la carte dans la base
-                    await Card.upsert({
-                        id: detailedCard.id,
-                        localId: detailedCard.localId,
-                        description: detailedCard.description || 'Inconnu',
-                        name: detailedCard.name,
-                        image: detailedCard.image || 'Inconnu',
-                        type: detailedCard.types ? detailedCard.types.join(', ') : 'Inconnu',
-                        category: detailedCard.category,
-                        rarity: detailedCard.rarity,
-                        setId: set.id,
-                        setName: set.name,
-                        setLogo: set.logo || 'Inconnu',
-                        illustrator: detailedCard.illustrator || 'Inconnu',
-                    });
-                    console.log(`Carte ${detailedCard.name} ajoutée avec succès.`);
-                } else {
-                    // Si la carte existe, on compare et met à jour les champs non nuls
-                    const detailedResponse = await axios.get(`${BASE_URL}/cards/${card.id}`);
-                    const detailedCard = detailedResponse.data as TCGDexCard;
+            await card.update({
+                image: data.image ?? card.image,
+                type: data.types ? data.types.join(', ') : card.type,
+                description: data.description ?? card.description,
+                illustrator: data.illustrator ?? card.illustrator,
+                rarity: data.rarity ?? card.rarity,
+            });
 
-                    const updatedFields = updateNullFields(existingCard.get(), {
-                        localId: detailedCard.localId,
-                        description: detailedCard.description,
-                        name: detailedCard.name,
-                        image: detailedCard.image,
-                        type: detailedCard.types ? detailedCard.types.join(', ') : null,
-                        category: detailedCard.category,
-                        rarity: detailedCard.rarity,
-                        setId: set.id,
-                        setName: set.name,
-                        setLogo: set.logo,
-                        illustrator: detailedCard.illustrator,
-                    });
-
-                    if (Object.keys(updatedFields).length > 0) {
-                        await existingCard.update(updatedFields);
-                        console.log(`Carte ${existingCard.name} mise à jour avec succès.`);
-                    } else {
-                        console.log(`Aucune mise à jour nécessaire pour la carte ${existingCard.name}.`);
-                    }
-                }
-            }
-            console.log(`Cartes du set ${setId} synchronisées avec succès.`);
+            console.log(`[Fix] Carte corrigée : ${card.name} (${card.id})`);
+            fixed++;
+        } catch (err) {
+            console.error(`[Fix] Erreur sur ${card.id}`, err);
+            failed++;
         }
-    } catch (error) {
-        console.error('Erreur lors de la synchronisation des cartes depuis la base de données :', error);
     }
+
+    console.log(`[Fix] ${fixed} cartes corrigées, ${failed} erreurs`);
+    return { fixed, failed };
+};
+
+// Sync complet (sets + cartes)
+export const syncAll = async () => {
+    console.log('[Sync] Démarrage du sync complet...');
+    const setsResult = await syncSetsFromApi();
+    const cardsResult = await syncCardsFromApi();
+    console.log('[Sync] Sync terminé.');
+    return { sets: setsResult, cards: cardsResult };
 };

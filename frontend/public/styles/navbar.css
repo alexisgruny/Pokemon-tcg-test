@@ -1,44 +1,81 @@
-/* Navbar */
+/* NAVBAR — palette BG corail/crème */
+
 .navbar {
-    background-color: rgb(143, 141, 137);
-    color: rgb(253, 232, 207);
-    padding: 10 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #2D2420 0%, #3D302A 100%);
+  color: #FFFAF5;
+  padding: 0 1.5rem;
+  box-shadow: 0 3px 16px rgba(45, 36, 32, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid #E8736A;
 }
 
 .navbar ul {
-    list-style: none;
-    padding: 10px 0;
-    margin: 0 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 60px;
 }
 
-
-.navbar ul li {
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
+/* Logo — premier item poussé à gauche */
+.navbar ul li:first-child {
+  margin-right: auto;
 }
 
+.navbar ul li:first-child a {
+  font-family: 'Pokemon Solid', 'Roboto', Arial, sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  color: #F2A99F;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+.navbar ul li:first-child a:hover {
+  background-color: rgba(232, 115, 106, 0.2);
+  color: #FFCB05;
+}
 
 .navbar ul li a {
-    color: rgb(253, 232, 207);
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-    display: inline-block;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    margin: 0;
+  color: #F7EAD8;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: background-color 0.2s, color 0.2s, transform 0.15s;
+  display: block;
+  letter-spacing: 0.02em;
 }
 
 .navbar ul li a:hover {
-    transform: scale(1.2);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    text-decoration: underline;
+  background-color: rgba(232, 115, 106, 0.25);
+  color: #F2A99F;
+  transform: translateY(-1px);
+}
+
+/* Bouton déconnexion */
+.navbar button {
+  background: rgba(232, 115, 106, 0.15);
+  color: #F2A99F;
+  border: 1px solid rgba(232, 115, 106, 0.4);
+  padding: 7px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.navbar button:hover {
+  background: #E8736A;
+  color: #FFFAF5;
+  border-color: #E8736A;
+  transform: translateY(-1px);
 }

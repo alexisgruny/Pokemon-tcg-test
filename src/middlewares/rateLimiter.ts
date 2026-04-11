@@ -7,7 +7,7 @@ export const authLimiter = rateLimit({
   message: 'Trop de tentatives de connexion. Réessayez dans 15 minutes.',
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => process.env.NODE_ENV !== 'production', // Skip rate limiting in development
+  skip: (_req) => process.env.NODE_ENV !== 'production', // Skip rate limiting in development
 });
 
 // Limiter plus strict pour Google OAuth
@@ -17,7 +17,7 @@ export const googleAuthLimiter = rateLimit({
   message: 'Trop de tentatives Google OAuth. Réessayez dans 15 minutes.',
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: (_req) => process.env.NODE_ENV !== 'production',
 });
 
 // Limiter général pour l'API

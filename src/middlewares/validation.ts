@@ -15,9 +15,7 @@ export const validateRegister = [
     .normalizeEmail(),
   body('password')
     .isLength({ min: 8 })
-    .withMessage('Le mot de passe doit contenir au moins 8 caractères.')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/)
-    .withMessage('Le mot de passe doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial.'),
+    .withMessage('Le mot de passe doit contenir au moins 8 caractères.'),
   body('inGameName')
     .trim()
     .isLength({ min: 3, max: 20 })
@@ -30,7 +28,7 @@ export const validateRegister = [
     if (!errors.isEmpty()) {
       return res.status(400).json({ success: false, errors: errors.array() });
     }
-    next();
+    return next();
   }
 ];
 
@@ -42,13 +40,13 @@ export const validateLogin = [
     .normalizeEmail(),
   body('password')
     .isLength({ min: 8 })
-    .withMessage('Le mot de passe est invalide.'),
+    .withMessage('Le mot de passe doit contenir au moins 8 caractères.'),
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ success: false, errors: errors.array() });
     }
-    next();
+    return next();
   }
 ];
 
@@ -62,6 +60,6 @@ export const validateGoogleLogin = [
     if (!errors.isEmpty()) {
       return res.status(400).json({ success: false, errors: errors.array() });
     }
-    next();
+    return next();
   }
 ];

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:3000/api/cards/list)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e \"const a = require\\('./node_modules/axios'\\); console.log\\(typeof a.AxiosError\\)\")",
+      "Bash(curl -s http://localhost:3000/api/sets/list)",
+      "Bash(curl -s \"http://localhost:3000/api/cards/list\")",
+      "Bash(python -c \"import sys,json; data=json.load\\(sys.stdin\\); c=data['data'][0]; print\\('setLogo:', c.get\\('setLogo'\\)\\); print\\('image:', c.get\\('image'\\)\\)\")"
+    ]
+  }
+}

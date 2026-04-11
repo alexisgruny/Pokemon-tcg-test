@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import Set from '../model/set';
 import Card from '../model/card';
-import { Op, Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize';
 
 // Afficher la page d'accueil avec des cartes aléatoires
-export const showHomePage = async (req: Request, res: Response) => {
+export const showHomePage = async (_req: Request, res: Response) => {
     try {
         // Récupérer un set aléatoire
         const randomSet = await Set.findOne({
@@ -21,13 +21,13 @@ export const showHomePage = async (req: Request, res: Response) => {
             limit: 20,
         });
 
-        res.render('index', {
+        return res.render('index', {
             title: 'Accueil',
             cards: randomCards,
             set: randomSet,
         });
     } catch (error) {
         console.error('Erreur lors de la récupération depuis la base de données :', error);
-        res.status(500).send('Erreur lors de la récupération des cartes ou des sets.');
+        return res.status(500).send('Erreur lors de la récupération des cartes ou des sets.');
     }
 };

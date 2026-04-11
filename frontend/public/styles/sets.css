@@ -1,66 +1,118 @@
-/* Conteneur des sets */
-.sets-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px; /* Réduit l'espace entre les éléments */
-    justify-content: center;
-    list-style: none;
-    padding: 0;
+/* SETS PAGE — palette BG corail/crème */
+
+/* ---- Grille sets ---- */
+.sets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.25rem;
+  padding: 1rem 1.5rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Élément de set */
-.set-item {
-    flex: 0 1 calc(25% - 15px); /* 4 éléments par ligne */
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 8px; /* Réduit le padding */
-    background-color: #fff;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.set-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  background: #FFFAF5;
+  border: 2px solid #E5CABB;
+  border-radius: 14px;
+  padding: 1.25rem 1rem;
+  text-decoration: none;
+  color: #2D2420;
+  box-shadow: 0 3px 10px rgba(45, 36, 32, 0.10);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.set-item:hover {
-    background-color: #FDE8CF;
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.set-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 10px 28px rgba(232, 115, 106, 0.35);
+  border-color: #E8736A;
+  color: #2D2420;
 }
 
-/* Lien du set */
-.set-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    text-decoration: none;
-    color: #333;
-    height: 150px; /* Réduit la hauteur des liens */
-    padding: 8px; /* Réduit le padding */
+.set-logo-wrap {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Image du set */
-.set-link img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 8px; /* Réduit l'espace sous l'image */
-    flex-shrink: 0;
+.set-logo {
+  max-width: 100%;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(45,36,32,0.15));
+  transition: filter 0.2s;
 }
 
-/* Texte du set */
-.set-link p {
-    margin: 0;
-    font-size: 12px; /* Réduit la taille du texte */
-    color: #555;
-    flex-grow: 1; /* Permet au texte de s'étirer si nécessaire */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+.set-card:hover .set-logo {
+  filter: drop-shadow(0 4px 10px rgba(232, 115, 106, 0.45));
 }
 
-/* Effet au survol */
-.set-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.set-logo-placeholder {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E8736A, #C5554C);
+  color: #FFFAF5;
+  font-family: 'Pokemon Solid', Arial, sans-serif;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(232, 115, 106, 0.3);
+}
+
+.set-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+  color: #2D2420;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* ---- Page cartes d'un set ---- */
+.set-cards-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 3rem;
+}
+
+.set-cards-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: #FFFAF5;
+  border: 2px solid #E5CABB;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(45, 36, 32, 0.10);
+}
+
+.set-header-logo {
+  max-height: 80px;
+  width: auto;
+  margin: 0 auto 0.75rem;
+  filter: drop-shadow(0 2px 6px rgba(45,36,32,0.15));
+}
+
+.set-cards-header h1 {
+  font-family: 'Pokemon Solid', Arial, sans-serif;
+  color: #2D2420;
+  font-size: 1.6rem;
+  margin: 0 0 0.4rem;
+  letter-spacing: 0.05em;
+}
+
+.set-cards-count {
+  color: #E8736A;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin: 0;
+  letter-spacing: 0.04em;
 }

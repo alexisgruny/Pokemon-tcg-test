@@ -1,18 +1,19 @@
 import { Request, Response } from 'express';
+import { Op } from 'sequelize';
 import OwnedCard from '../model/ownedCard';
 import Card from '../model/card';
+import { ApiResponse } from '../utils/apiResponse';
+import { CARD_MESSAGES } from '../constants/messages';
+import { CARD_LIMITS } from '../constants/api';
 
-// === Affiche toutes les cartes avec informations de possession (pour un utilisateur connecté) ===
-export const getCardsApi = async (req: Request, res: Response) => {
+// === Affiche toutes les cartes ===
+export const getCardsApi = async (_req: Request, res: Response) => {
   try {
     const cards = await Card.findAll();
-    console.log('Route /api/cards/list appelé');
-
-    res.json({ cards });
-
+    return ApiResponse.success(res, cards, 'Cartes récupérées avec succès');
   } catch (error) {
     console.error('Erreur lors de la récupération des cartes :', error);
-    res.status(500).json({ error: 'Erreur lors de la récupération des cartes.' });
+    return ApiResponse.internal(res);
   }
 };
 
@@ -23,18 +24,13 @@ export const showCardDetails = async (req: Request, res: Response) => {
         const card = await Card.findByPk(cardId);
 
         if (!card) {
-            return res.status(404).send('Carte non trouvée');
+            return ApiResponse.notFound(res, CARD_MESSAGES.NOT_FOUND);
         }
 
-        res.render('cardDetails', {
-            title: card.name,
-            card,
-            isAuthenticated: !!req.session.user,
-        });
-
+        return ApiResponse.success(res, card);
     } catch (error) {
         console.error('Erreur lors de la récupération des détails de la carte :', error);
-        res.status(500).send('Erreur interne');
+        return ApiResponse.internal(res);
     }
 };
 
@@ -42,16 +38,16 @@ export const showCardDetails = async (req: Request, res: Response) => {
 export const addOrUpdateCard = async (req: Request, res: Response) => {
     try {
         const { cardId, quantity } = req.body as { cardId: string; quantity: number };
+        const userId = req.userId;
 
-        if (!req.session.user) {
-            return res.status(401).send('Non autorisé');
+        if (!userId) {
+            return ApiResponse.unauthorized(res);
         }
 
-        if (!cardId || typeof quantity !== 'number' || quantity < 0) {
-            return res.status(400).json({ message: 'Données invalides' });
+        // Validation des données
+        if (!cardId || typeof quantity !== 'number' || quantity < CARD_LIMITS.MIN_QUANTITY || quantity > CARD_LIMITS.MAX_QUANTITY) {
+            return ApiResponse.badRequest(res, CARD_MESSAGES.INVALID_DATA);
         }
-
-        const userId = req.session.user.id;
 
         const existingCard = await OwnedCard.findOne({ where: { userId, cardId } });
 
@@ -62,11 +58,11 @@ export const addOrUpdateCard = async (req: Request, res: Response) => {
             await OwnedCard.create({ userId, cardId, quantity });
         }
 
-        res.status(200).json({ message: 'Carte mise à jour' });
-
+        const message = existingCard ? CARD_MESSAGES.UPDATED_SUCCESS : CARD_MESSAGES.ADDED_SUCCESS;
+        return ApiResponse.success(res, null, message);
     } catch (error) {
         console.error("Erreur add/update carte :", error);
-        res.status(500).json({ message: 'Erreur interne' });
+        return ApiResponse.internal(res);
     }
 };
 
@@ -74,17 +70,21 @@ export const addOrUpdateCard = async (req: Request, res: Response) => {
 export const removeCard = async (req: Request, res: Response) => {
     try {
         const { cardId } = req.body;
+        const userId = req.userId;
 
-        if (!req.session.user) {
-            return res.status(401).send('Non autorisé');
+        if (!userId) {
+            return ApiResponse.unauthorized(res);
         }
 
-        await OwnedCard.destroy({ where: { userId: req.session.user.id, cardId } });
-        res.status(200).json({ message: 'Carte supprimée' });
+        if (!cardId) {
+            return ApiResponse.badRequest(res, CARD_MESSAGES.INVALID_DATA);
+        }
 
+        await OwnedCard.destroy({ where: { userId, cardId } });
+        return ApiResponse.success(res, null, CARD_MESSAGES.REMOVED_SUCCESS);
     } catch (error) {
         console.error("Erreur suppression carte :", error);
-        res.status(500).json({ message: 'Erreur interne' });
+        return ApiResponse.internal(res);
     }
 };
 
@@ -103,11 +103,11 @@ export const filterOwnedCards = async (req: Request, res: Response) => {
 
         let whereClause: any = { id: cardIds };
         if (setName) whereClause.setName = setName;
-        if (name) whereClause.name = { $iLike: `%${name}%` }; // `$iLike` selon le dialecte Sequelize
+        if (name) whereClause.name = { [Op.iLike]: `%${name}%` };
 
         const cards = await Card.findAll({ where: whereClause });
 
-        res.render('cards', {
+        return res.render('cards', {
             title: 'Filtrage',
             cards,
             isAuthenticated: !!req.session.user,
@@ -115,7 +115,7 @@ export const filterOwnedCards = async (req: Request, res: Response) => {
 
     } catch (error) {
         console.error('Erreur filtrage cartes possédées :', error);
-        res.status(500).send('Erreur interne');
+        return res.status(500).send('Erreur interne');
     }
 };
 
@@ -126,9 +126,9 @@ export const filterAllCards = async (req: Request, res: Response) => {
 
         let whereClause: any = {};
 
-        if (name) whereClause.name = { $iLike: `%${name}%` };
+        if (name) whereClause.name = { [Op.iLike]: `%${name}%` };
         if (setName) whereClause.setName = setName;
-        if (type) whereClause.types = { $contains: [type] }; // Si 'types' est un tableau
+        if (type) whereClause.types = { [Op.contains]: [type] };
         if (rarity) whereClause.rarity = rarity;
 
         const cards = await Card.findAll({ where: whereClause });

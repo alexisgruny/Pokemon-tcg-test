@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import apiService from '../services/api';
 
 interface User {
   username: string;
@@ -12,65 +13,95 @@ interface User {
 const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
       try {
-        const res = await fetch('/api/profile/showProfile', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await apiService.getProfile();
 
-        if (res.status === 401) {
-          localStorage.removeItem('token');
-          navigate('/login');
+        if (!response.success) {
+          setError(response.error || 'Erreur lors de la récupération du profil');
           return;
         }
 
-        const data = await res.json();
-
-        if (!res.ok) {
-          setError(data.message || 'Erreur lors de la récupération du profil');
-          return;
-        }
-
-        setUser(data.user);
+        setUser(response.data as User);
       } catch (err) {
         console.error(err);
         setError('Impossible de charger le profil.');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProfile();
   }, [navigate]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="poke-loading">Chargement du profil</div>
+      </Layout>
+    );
+  }
+
   if (error) {
-    return <div className="text-red-500 text-center mt-10">{error}</div>;
+    return (
+      <Layout>
+        <div className="poke-status-error">{error}</div>
+      </Layout>
+    );
   }
 
   if (!user) {
-    return <div className="text-center mt-10">Chargement...</div>;
+    return (
+      <Layout>
+        <div className="poke-status-error">Profil non trouvé</div>
+      </Layout>
+    );
   }
+
+  const initials = user.username?.charAt(0).toUpperCase() ?? '?';
 
   return (
     <Layout>
-    <div className="max-w-lg mx-auto mt-10 p-6 border rounded-xl shadow">
-      <h1 className="text-2xl font-bold mb-4">Profil de {user.username}</h1>
+      <div className="profile-card">
+        <div className="profile-header">
+          <div className="profile-avatar">{initials}</div>
+          <h1>{user.username}</h1>
+        </div>
 
-      <p><strong>Nom d'utilisateur :</strong> {user.username}</p>
-      <p><strong>Email :</strong> {user.email}</p>
-      <p><strong>Nom en jeu :</strong> {user.inGameName || 'Non renseigné'}</p>
-      <p><strong>Code ami :</strong> {user.friendCode || 'Non renseigné'}</p>
-    </div>
+        <div className="profile-body">
+          <div className="profile-field">
+            <strong>Nom d'utilisateur</strong>
+            <span>{user.username}</span>
+          </div>
+          <div className="profile-field">
+            <strong>Email</strong>
+            <span>{user.email}</span>
+          </div>
+          <div className="profile-field">
+            <strong>Pseudo en jeu</strong>
+            <span>{user.inGameName || '—'}</span>
+          </div>
+          <div className="profile-field">
+            <strong>Code ami</strong>
+            <span>{user.friendCode || '—'}</span>
+          </div>
+        </div>
+
+        <div className="profile-footer">
+          <button onClick={handleLogout} className="poke-btn-danger">
+            Déconnexion
+          </button>
+        </div>
+      </div>
     </Layout>
   );
 };

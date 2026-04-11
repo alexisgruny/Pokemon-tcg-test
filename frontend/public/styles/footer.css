@@ -1,29 +1,40 @@
-/* Footer */
+/* FOOTER — palette BG corail/crème */
+
 .footer {
-    background-color: rgb(143, 141, 137); 
-    color: rgb(253, 232, 207); 
-    padding: 20px 0;
-    text-align: center;
-    margin-top: auto;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #2D2420 0%, #3D302A 100%);
+  color: #F7EAD8;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  margin-top: auto;
+  box-shadow: 0 -3px 16px rgba(45, 36, 32, 0.25);
+  border-top: 3px solid #E8736A;
+}
+
+.footer p {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
 }
 
 .footer-links {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0 0;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
+  list-style: none;
+  padding: 0;
+  margin: 0.6rem 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .footer-links a {
-    color: rgb(253, 232, 207);
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
+  color: #F2A99F;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+  letter-spacing: 0.03em;
 }
 
 .footer-links a:hover {
-    color: #f0a500;
+  color: #FFCB05;
 }

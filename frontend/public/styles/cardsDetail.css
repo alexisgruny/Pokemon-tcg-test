@@ -1,136 +1,223 @@
+/* CARD DETAIL — palette BG corail/crème */
+
+.card-detail-page {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.card-detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #E8736A;
+  font-weight: 700;
+  font-size: 0.88rem;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #E5CABB;
+  background: #FFFAF5;
+  transition: all 0.2s;
+}
+
+.card-detail-back:hover {
+  background: #fdf0ee;
+  border-color: #E8736A;
+  color: #C5554C;
+}
+
 .card-detail-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 2rem;
+  align-items: start;
 }
 
-/* Détails de la carte */
+@media (max-width: 640px) {
+  .card-detail-container { grid-template-columns: 1fr; }
+}
+
+/* ---- Image panel ---- */
+.card-image-panel {
+  position: sticky;
+  top: 80px;
+}
+
+.card-image-panel img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(45, 36, 32, 0.22);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-image-panel img:hover {
+  transform: perspective(800px) rotateY(-4deg) scale(1.04);
+  box-shadow: 0 20px 60px rgba(232, 115, 106, 0.35);
+}
+
+/* ---- Info panel ---- */
 .card-detail {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    color: #fff;
+  background: #FFFAF5;
+  border-radius: 14px;
+  padding: 1.75rem;
+  box-shadow: 0 4px 16px rgba(45, 36, 32, 0.12);
+  border: 2px solid #E5CABB;
+  color: #2D2420;
 }
 
-/* Types de Pokémon */
-.Grass {
-    background: linear-gradient(145deg, #d5df28, #88b93e);
+.card-detail h1 {
+  font-family: 'Pokemon Solid', Arial, sans-serif;
+  font-size: 1.5rem;
+  text-align: left;
+  color: #2D2420;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid #E8736A;
 }
 
-.Fire {
-    background: linear-gradient(145deg, #f08030, #c03028);
+.card-detail-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  background: #F7EAD8;
+  border: 1px solid #E5CABB;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
 }
 
-.Water {
-    background: linear-gradient(145deg, #9fdcf7, #12a0da);
+.card-detail-field:last-of-type { margin-bottom: 1.25rem; }
+
+.card-detail-field strong {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5C3D35;
 }
 
-.Lightning {
-    background: linear-gradient(145deg, #f8d030, #e0b020);
+.card-detail-field span {
+  font-weight: 700;
+  color: #2D2420;
 }
 
-.Psychic {
-    background: linear-gradient(145deg, #cf9bc3, #874a97);
+/* ---- Badges type ---- */
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 0.04em;
 }
 
-.Darkness {
-    background: linear-gradient(145deg, #09322f, #09322f);
+.type-badge.Grass     { background: #d5f0a8; color: #3a6a15; }
+.type-badge.Fire      { background: #ffd4c0; color: #8b2500; }
+.type-badge.Water     { background: #b8e4f9; color: #0a4c7a; }
+.type-badge.Lightning { background: #fff3a0; color: #7a5c00; }
+.type-badge.Psychic   { background: #eac4e8; color: #6a1060; }
+.type-badge.Darkness  { background: #c8c8d8; color: #1a1a2e; }
+.type-badge.Fighting  { background: #f9d8a0; color: #7a3c00; }
+.type-badge.Metal     { background: #d8e4e8; color: #2a4a50; }
+.type-badge.Dragon    { background: #e0d870; color: #4a4000; }
+.type-badge.Colorless { background: #f0eeea; color: #4a4a4a; }
+
+/* ---- Badge rareté ---- */
+.rarity-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  background: linear-gradient(135deg, #FFCB05, #E6B800);
+  color: #2D2420;
+  box-shadow: 0 2px 6px rgba(230, 184, 0, 0.35);
 }
 
-.Fighting {
-    background: linear-gradient(145deg, #ebb302, #ce850a);
-}
-
-.Metal {
-    background: linear-gradient(145deg, #e6ecf0, #afbdbb);
-    color: black;
-}
-
-.Dragon {
-    background: linear-gradient(145deg, #debf2c, #706b23);
-}
-
-.Colorless {
-    background: linear-gradient(145deg, #f2f1ed, #e7e3e0);
-    color: black;
-}
-
-.card-detail img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.card-detail p {
-    font-size: 16px;
-    margin: 10px 0;;
-}
-
-.card-detail-annexe {
-    width: auto;
-    height: auto;
-    text-align: center;
-}
+/* ---- Panneau actions ---- */
 .card-actions {
-    background-color: rgb(143, 141, 137);
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    color: #fff;
+  background: #FFFAF5;
+  border-radius: 14px;
+  padding: 1.25rem 1.75rem;
+  box-shadow: 0 4px 16px rgba(45, 36, 32, 0.10);
+  border: 2px solid #E5CABB;
+  margin-top: 1rem;
+}
+
+.card-actions h3 {
+  font-family: 'Pokemon Solid', Arial, sans-serif;
+  font-size: 0.95rem;
+  text-align: left;
+  color: #E8736A;
+  margin: 0 0 1rem;
+  letter-spacing: 0.05em;
+}
+
+.card-action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .need-button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
+  flex: 1;
+  min-width: 120px;
+  background: #E8736A;
+  color: #FFFAF5;
+  border: 2px solid #C5554C;
+  padding: 0.65rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  letter-spacing: 0.04em;
 }
-.action-button .need-button:hover {
-    background-color: #45a049;
+
+.need-button:hover {
+  background: #C5554C;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(232, 115, 106, 0.35);
 }
 
 .trade-button {
-    background-color: #008CBA; /* Blue */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
-}
-.action-button .trade-button:hover {
-    background-color: #007bb5;
+  flex: 1;
+  min-width: 120px;
+  background: #2D2420;
+  color: #F7EAD8;
+  border: 2px solid #1a120f;
+  padding: 0.65rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  letter-spacing: 0.04em;
 }
 
-.back-link {
-    text-decoration: none;
-    color: #fff;
-    font-size: 16px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    background-color: red; /* Green */
-    transition: background-color 0.3s ease;
-    margin: auto;
+.trade-button:hover {
+  background: #1a120f;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(45, 36, 32, 0.30);
 }
+
+/* Accent couleur par type (bordure top) */
+.card-detail.Grass     { border-top: 5px solid #88b93e; }
+.card-detail.Fire      { border-top: 5px solid #f08030; }
+.card-detail.Water     { border-top: 5px solid #12a0da; }
+.card-detail.Lightning { border-top: 5px solid #f8d030; }
+.card-detail.Psychic   { border-top: 5px solid #874a97; }
+.card-detail.Darkness  { border-top: 5px solid #3a3a5a; }
+.card-detail.Fighting  { border-top: 5px solid #ce850a; }
+.card-detail.Metal     { border-top: 5px solid #9aacaa; }
+.card-detail.Dragon    { border-top: 5px solid #a09020; }
+.card-detail.Colorless { border-top: 5px solid #c8c4be; }

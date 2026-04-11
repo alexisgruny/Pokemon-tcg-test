@@ -1,5 +1,36 @@
 import { Request, Response } from 'express';
 import User from '../model/user';
+import { ApiResponse } from '../utils/apiResponse';
+
+// API endpoint - Récupérer le profil de l'utilisateur connecté
+export const getProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).userId;
+
+        if (!userId) {
+            return ApiResponse.unauthorized(res, 'Utilisateur non authentifié');
+        }
+
+        const user = await User.findByPk(userId, {
+            attributes: { exclude: ['password'] }
+        });
+
+        if (!user) {
+            return ApiResponse.notFound(res, 'Utilisateur non trouvé');
+        }
+
+        return ApiResponse.success(res, {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            friendCode: user.friendCode,
+            inGameName: user.inGameName,
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération du profil :', error);
+        return ApiResponse.internal(res, 'Erreur lors de la récupération du profil');
+    }
+};
 
 // Afficher le profil
 export const showProfile = async (req: Request, res: Response) => {

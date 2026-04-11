@@ -1,6 +1,5 @@
 import app from './app';
 import sequelize from './config/db';
-import { syncCardsFromApi, syncSetsFromApi} from './services/tcgdexService';
 
 const PORT = process.env.PORT || 3000;
 

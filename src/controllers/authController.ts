@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
-import { LoginBody, GooglePayload, RegisterBody } from 'src/types/auth';
+import { LoginBody, GooglePayload, RegisterBody } from '../types/auth';
 import bcrypt from 'bcrypt';
 import User from '../model/user';
 import jwt from 'jsonwebtoken';
+import { ApiResponse } from '../utils/apiResponse';
+import { AUTH_MESSAGES } from '../constants/messages';
+import { HTTP_STATUS } from '../constants/api';
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const jwtSecret = process.env.JWT_SECRET;
@@ -11,12 +14,12 @@ const jwtSecret = process.env.JWT_SECRET;
 // === Affichage des vues ===
 
 // Page de connexion
-export const showLogin = (req: Request, res: Response) => {
+export const showLogin = (_req: Request, res: Response) => {
     res.render('login', { title: 'Connexion' });
 };
 
 // Page d'inscription
-export const showRegister = (req: Request, res: Response) => {
+export const showRegister = (_req: Request, res: Response) => {
     res.render('register', { title: 'Inscription' });
 };
 
@@ -32,7 +35,7 @@ export const login = async (req: Request, res: Response) => {
 
         // Vérifie existence et mot de passe
         if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
-            return res.status(401).json({ message: 'Identifiants invalides' });
+            return ApiResponse.unauthorized(res, AUTH_MESSAGES.INVALID_CREDENTIALS);
         }
 
         // Vérifie la clé secrète JWT
@@ -40,10 +43,10 @@ export const login = async (req: Request, res: Response) => {
 
         // Génère le token JWT
         const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '7d' });
-        res.json({ token });
+        return ApiResponse.success(res, { token }, AUTH_MESSAGES.LOGIN_SUCCESS);
     } catch (error) {
         console.error("Erreur de login:", error);
-        res.status(500).json({ message: 'Erreur lors de la connexion' });
+        return ApiResponse.internal(res);
     }
 };
 
@@ -63,30 +66,10 @@ export const register = async (req: Request, res: Response) => {
     try {
         const { username, email, password, inGameName, friendCode } = req.body as RegisterBody;
 
-        // Validation des champs requis
-        if (!username || !email || !password || !inGameName || !friendCode) {
-            return res.status(400).json({
-                success: false,
-                message: 'Tous les champs sont obligatoires.',
-            });
-        }
-
-        // Validation de la complexité du mot de passe
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        if (!passwordRegex.test(password)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.',
-            });
-        }
-
         // Vérifie si l'email est déjà utilisé
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(409).json({
-                success: false,
-                message: 'Cet email est déjà utilisé.',
-            });
+            return ApiResponse.conflict(res, AUTH_MESSAGES.EMAIL_ALREADY_EXISTS);
         }
 
         // Hash du mot de passe et création du compte
@@ -100,16 +83,15 @@ export const register = async (req: Request, res: Response) => {
             inGameName,
         });
 
-        return res.status(201).json({
-            success: true,
-            message: 'Inscription réussie. Veuillez vous connecter.',
-        });
+        return ApiResponse.success(
+            res,
+            null,
+            AUTH_MESSAGES.REGISTRATION_SUCCESS,
+            HTTP_STATUS.CREATED
+        );
     } catch (error) {
         console.error("Erreur lors de l'inscription :", error);
-        return res.status(500).json({
-            success: false,
-            message: 'Une erreur est survenue lors de la création de votre compte.',
-        });
+        return ApiResponse.internal(res);
     }
 };
 
@@ -124,13 +106,13 @@ export const googleLogin = async (req: Request, res: Response) => {
         });
 
         const payload = ticket.getPayload() as GooglePayload;
-        if (!payload) return res.status(400).json({ error: 'Token invalide' });
+        if (!payload) return ApiResponse.badRequest(res, AUTH_MESSAGES.INVALID_GOOGLE_TOKEN);
 
         const { sub: googleId, email, name } = payload;
 
         // Validation des données Google
         if (!email || !name || !googleId) {
-            return res.status(400).json({ error: 'Informations Google incomplètes.' });
+            return ApiResponse.badRequest(res, AUTH_MESSAGES.INCOMPLETE_GOOGLE_DATA);
         }
 
         // Cherche l'utilisateur existant
@@ -157,9 +139,9 @@ export const googleLogin = async (req: Request, res: Response) => {
         if (!jwtSecret) throw new Error("JWT_SECRET manquant");
         const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '7d' });
 
-        res.json({ token });
+        return ApiResponse.success(res, { token }, AUTH_MESSAGES.LOGIN_SUCCESS);
     } catch (error) {
         console.error("Erreur d'authentification Google:", error);
-        res.status(500).json({ message: 'Erreur de connexion via Google' });
+        return ApiResponse.internal(res);
     }
 };
