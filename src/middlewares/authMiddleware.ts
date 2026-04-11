@@ -25,8 +25,13 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
     }
 
     const token = authHeader.substring(7);
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+        console.error('FATAL: JWT_SECRET non défini');
+        return res.status(500).json({ success: false, message: 'Erreur de configuration serveur.' });
+    }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'change-this-secret') as { userId: number };
+        const decoded = jwt.verify(token, secret) as { userId: number };
         req.userId = decoded.userId;
         next();
     } catch (error) {

@@ -15,6 +15,7 @@ import profileRoutes from './routes/profile';
 import userRoutes from './routes/users';
 import setRoutes from './routes/sets';
 import adminRoutes from './routes/admin';
+import wantedRoutes from './routes/wanted';
 
 dotenv.config();
 const app = express();
@@ -57,6 +58,7 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/sets', setRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/wanted', wantedRoutes);
 
 app.get('*', (_req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));

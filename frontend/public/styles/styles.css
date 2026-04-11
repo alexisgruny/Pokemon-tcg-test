@@ -69,3 +69,236 @@
   color: #5C3D35;
   font-size: 0.9rem;
 }
+
+/* ===========================
+   PAGE DRESSEURS
+   =========================== */
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 1.5rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.user-profile-card {
+  background: #FFFAF5;
+  border: 2px solid #E5CABB;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(45, 36, 32, 0.10);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.user-profile-card:hover {
+  border-color: #E8736A;
+  box-shadow: 0 8px 28px rgba(232, 115, 106, 0.22);
+  transform: translateY(-3px);
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #E8736A, #C5554C);
+  border-bottom: 3px solid #FFCB05;
+}
+
+.user-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #FFCB05;
+  border: 3px solid #FFFAF5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pokemon Solid', Arial, sans-serif;
+  font-size: 1.5rem;
+  color: #2D2420;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(45,36,32,0.2);
+}
+
+.user-info h2 {
+  font-family: 'Pokemon Solid', Arial, sans-serif;
+  font-size: 1rem;
+  color: #FFFAF5;
+  margin: 0 0 0.2rem;
+  text-align: left;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 4px rgba(45,36,32,0.3);
+}
+
+.user-ingame {
+  color: rgba(255,250,245,0.85);
+  font-size: 0.82rem;
+  margin: 0 0 0.15rem;
+  font-weight: 600;
+}
+
+.user-friendcode {
+  color: rgba(255,250,245,0.7);
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.user-friendcode span {
+  font-weight: 700;
+  color: #FFCB05;
+  margin-right: 0.3rem;
+}
+
+/* Section cartes souhaitées */
+.user-wanted-section {
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.user-wanted-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5C3D35;
+  margin: 0 0 0.75rem;
+}
+
+.user-wanted-cards {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.user-wanted-card {
+  flex: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(45,36,32,0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  aspect-ratio: 3/4;
+  display: block;
+}
+
+.user-wanted-card:hover {
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 6px 16px rgba(232,115,106,0.35);
+}
+
+.user-wanted-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.user-wanted-slot-empty {
+  flex: 1;
+  aspect-ratio: 3/4;
+  border-radius: 8px;
+  border: 2px dashed #E5CABB;
+  background: #F7EAD8;
+}
+
+.user-wanted-empty {
+  color: #5C3D35;
+  font-size: 0.8rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Message feedback wanted */
+.wanted-msg {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #E8736A;
+  margin: 0.75rem 0 0;
+}
+
+/* Lien wrapper card dresseur */
+.user-profile-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* ===========================
+   PAGE PROFIL DRESSEUR
+   =========================== */
+.user-profile-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 3rem;
+}
+
+.user-profile-banner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: linear-gradient(135deg, #E8736A, #C5554C);
+  border-radius: 14px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 4px solid #FFCB05;
+  box-shadow: 0 4px 16px rgba(45,36,32,0.15);
+}
+
+.user-avatar-lg {
+  width: 80px;
+  height: 80px;
+  font-size: 2.2rem;
+  flex-shrink: 0;
+}
+
+.user-banner-info h1 {
+  font-family: 'Pokemon Solid', Arial, sans-serif;
+  color: #FFFAF5;
+  font-size: 1.8rem;
+  margin: 0 0 0.3rem;
+  text-align: left;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 6px rgba(45,36,32,0.3);
+}
+
+.user-banner-info .user-ingame {
+  font-size: 1rem;
+  color: rgba(255,250,245,0.9);
+  margin-bottom: 0.2rem;
+}
+
+.user-banner-info .user-friendcode {
+  font-size: 0.88rem;
+  color: rgba(255,250,245,0.75);
+}
+
+.user-wanted-full {
+  background: #FFFAF5;
+  border-radius: 14px;
+  border: 2px solid #E5CABB;
+  box-shadow: 0 4px 16px rgba(45,36,32,0.08);
+  padding: 1.5rem 0;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.wanted-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #E8736A;
+  color: #FFFAF5;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  padding: 0 8px;
+}

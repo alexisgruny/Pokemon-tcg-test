@@ -2,6 +2,54 @@ import { Request, Response } from 'express';
 import User from '../model/user';
 import { ApiResponse } from '../utils/apiResponse';
 
+// API endpoint - Modifier le profil (JSON)
+export const updateProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).userId;
+        if (!userId) return ApiResponse.unauthorized(res);
+
+        const { username, email, inGameName, friendCode } = req.body as {
+            username?: string;
+            email?: string;
+            inGameName?: string;
+            friendCode?: string;
+        };
+
+        const user = await User.findByPk(userId);
+        if (!user) return ApiResponse.notFound(res, 'Utilisateur non trouvé');
+
+        // Vérifie unicité username si changé
+        if (username && username !== user.username) {
+            const taken = await User.findOne({ where: { username } });
+            if (taken) return ApiResponse.conflict(res, 'Ce nom d\'utilisateur est déjà pris');
+        }
+
+        // Vérifie unicité email si changé
+        if (email && email !== user.email) {
+            const taken = await User.findOne({ where: { email } });
+            if (taken) return ApiResponse.conflict(res, 'Cet email est déjà utilisé');
+        }
+
+        await user.update({
+            username: username ?? user.username,
+            email: email ?? user.email,
+            inGameName: inGameName ?? user.inGameName,
+            friendCode: friendCode ?? user.friendCode,
+        });
+
+        return ApiResponse.success(res, {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            inGameName: user.inGameName,
+            friendCode: user.friendCode,
+        }, 'Profil mis à jour');
+    } catch (error) {
+        console.error('Erreur updateProfile :', error);
+        return ApiResponse.internal(res);
+    }
+};
+
 // API endpoint - Récupérer le profil de l'utilisateur connecté
 export const getProfile = async (req: Request, res: Response) => {
     try {

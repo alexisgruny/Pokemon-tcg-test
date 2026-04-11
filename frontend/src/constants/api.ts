@@ -18,6 +18,12 @@ export const API_ROUTES = {
     REMOVE: '/cards/remove',
     FILTER: '/cards/filter',
   },
+  // Wanted cards
+  WANTED: {
+    LIST: '/wanted',
+    ADD: '/wanted/add',
+    REMOVE: '/wanted/remove',
+  },
   // Sets
   SETS: {
     LIST: '/sets/list',

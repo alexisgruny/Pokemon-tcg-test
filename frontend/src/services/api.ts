@@ -94,6 +94,21 @@ class ApiService {
   }
 
   /**
+   * WANTED CARD ENDPOINTS
+   */
+  async getWantedCards(): Promise<ApiResponse<any[]>> {
+    return this.get(API_ROUTES.WANTED.LIST);
+  }
+
+  async addWantedCard(cardId: string): Promise<ApiResponse> {
+    return this.post(API_ROUTES.WANTED.ADD, { cardId });
+  }
+
+  async removeWantedCard(cardId: string): Promise<ApiResponse> {
+    return this.post(API_ROUTES.WANTED.REMOVE, { cardId });
+  }
+
+  /**
    * SET ENDPOINTS
    */
   async getSets(): Promise<ApiResponse<any[]>> {

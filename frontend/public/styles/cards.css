@@ -1,5 +1,71 @@
 /* CARDS PAGE — palette BG corail/crème */
 
+/* ---- Barre de recherche cartes ---- */
+.cards-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 560px;
+  margin: 1.5rem auto 0.5rem;
+  padding: 0 1.5rem;
+  position: relative;
+}
+
+.cards-search-bar input {
+  flex: 1;
+  padding: 0.75rem 1.1rem;
+  border: 2px solid #E5CABB;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #2D2420;
+  background: #FFFAF5;
+  box-shadow: 0 2px 8px rgba(45,36,32,0.08);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.cards-search-bar input:focus {
+  border-color: #E8736A;
+  box-shadow: 0 0 0 3px rgba(232,115,106,0.18);
+}
+
+.cards-search-clear {
+  position: absolute;
+  right: 140px;
+  background: none;
+  border: none;
+  color: #5C3D35;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  transition: background 0.15s;
+}
+
+.cards-search-clear:hover {
+  background: #F7EAD8;
+}
+
+.cards-search-count {
+  white-space: nowrap;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #E8736A;
+  background: #fdf0ee;
+  border: 1px solid #F2A99F;
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+}
+
+.cards-no-result {
+  text-align: center;
+  color: #5C3D35;
+  font-style: italic;
+  padding: 2rem;
+  font-size: 0.95rem;
+}
+
 /* ---- Grid view ---- */
 .grid-view {
   display: grid;

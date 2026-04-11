@@ -214,6 +214,49 @@ img { display: block; }
   box-shadow: var(--shadow);
 }
 
+.poke-success {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: var(--radius-sm);
+  color: #16a34a;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.poke-btn-edit {
+  display: block;
+  text-align: center;
+  background: var(--cream);
+  color: var(--dark);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  width: 100%;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s;
+}
+
+.poke-btn-edit:hover {
+  border-color: var(--coral);
+  background: #fdf0ee;
+  color: var(--coral);
+}
+
+.profile-footer {
+  padding: 1rem 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .poke-link-hint {
   text-align: center;
   font-size: 0.9rem;

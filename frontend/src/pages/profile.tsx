@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import apiService from '../services/api';
 
@@ -97,6 +97,9 @@ const Profile = () => {
         </div>
 
         <div className="profile-footer">
+          <Link to="/profile/edit" className="poke-btn-edit">
+            Modifier le profil
+          </Link>
           <button onClick={handleLogout} className="poke-btn-danger">
             Déconnexion
           </button>
