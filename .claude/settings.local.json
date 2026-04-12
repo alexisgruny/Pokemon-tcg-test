@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(python -c ':*)",
-      "Bash(npx update-browserslist-db@latest)"
+      "Bash(npx update-browserslist-db@latest)",
+      "Bash(npm install:*)"
     ]
   }
 }
