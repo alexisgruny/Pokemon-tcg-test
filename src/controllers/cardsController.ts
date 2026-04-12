@@ -1,10 +1,24 @@
 import { Request, Response } from 'express';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import OwnedCard from '../model/ownedCard';
 import Card from '../model/card';
 import { ApiResponse } from '../utils/apiResponse';
 import { CARD_MESSAGES } from '../constants/messages';
 import { CARD_LIMITS } from '../constants/api';
+
+// === Cartes aléatoires pour la home ===
+export const getRandomCards = async (_req: Request, res: Response) => {
+  try {
+    const cards = await Card.findAll({
+      order: Sequelize.literal('RANDOM()'),
+      limit: 20,
+    });
+    return ApiResponse.success(res, cards);
+  } catch (error) {
+    console.error('Erreur cartes aléatoires :', error);
+    return ApiResponse.internal(res);
+  }
+};
 
 // === Affiche toutes les cartes ===
 export const getCardsApi = async (_req: Request, res: Response) => {

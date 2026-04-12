@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { getCardsApi, showCardDetails, addOrUpdateCard, removeCard, filterAllCards } from '../controllers/cardsController';
+import { getRandomCards, getCardsApi, showCardDetails, addOrUpdateCard, removeCard, filterAllCards } from '../controllers/cardsController';
 import { isAuthenticated } from '../middlewares/authMiddleware';
 
 const router = Router();
 
 // Routes pour afficher les cartes
+router.get('/random', getRandomCards);
 router.get('/list', getCardsApi);
 router.get('/id/:id', showCardDetails);
 router.get('/filter', filterAllCards);

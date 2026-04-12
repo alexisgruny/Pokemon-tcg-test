@@ -85,6 +85,10 @@ class ApiService {
   /**
    * CARD ENDPOINTS
    */
+  async getRandomCards(): Promise<ApiResponse<any[]>> {
+    return this.get(API_ROUTES.CARDS.RANDOM);
+  }
+
   async getCards(): Promise<ApiResponse<any[]>> {
     return this.get(API_ROUTES.CARDS.LIST);
   }

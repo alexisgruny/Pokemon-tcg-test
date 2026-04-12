@@ -15,6 +15,7 @@ export const API_ROUTES = {
   },
   // Cards
   CARDS: {
+    RANDOM: '/cards/random',
     LIST: '/cards/list',
     DETAILS: (id: string) => `/cards/id/${id}`,
     ADD_OR_UPDATE: '/cards/addOrUpdate',
