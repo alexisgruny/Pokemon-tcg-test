@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import path from 'path';
 import sessionMiddleware from './config/session';
 import { errorHandler } from './middlewares/errorHandler';
 import { apiLimiter } from './middlewares/rateLimiter';
@@ -65,6 +66,10 @@ app.use((req, res, next) => {
     next();
 });
 
+// Fichiers statiques frontend
+const frontendDist = path.resolve(__dirname, '..', 'frontend', 'dist');
+app.use(express.static(frontendDist));
+
 // Routes
 app.use('/api/', indexRoutes);
 app.use('/api/auth', authRoutes);
@@ -74,6 +79,14 @@ app.use('/api/users', userRoutes);
 app.use('/api/sets', setRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/wanted', wantedRoutes);
+
+// SPA catch-all — ne pas intercepter les assets (js/css/images)
+app.get('*', (req, res) => {
+  if (/\.(js|css|png|jpg|jpeg|svg|ico|woff|woff2|ttf|webp|gif)$/.test(req.path)) {
+    return res.status(404).end();
+  }
+  return res.sendFile(path.join(frontendDist, 'index.html'));
+});
 
 // Gestion centralisée des erreurs
 app.use(errorHandler);
