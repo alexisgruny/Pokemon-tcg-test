@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import dotenv from 'dotenv';
 import path from 'path';
 import sessionMiddleware from './config/session';
@@ -22,6 +23,22 @@ const app = express();
 
 // Nécessaire sur Vercel/proxies pour que rate-limit et sessions fonctionnent
 app.set('trust proxy', 1);
+
+// Security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", 'data:', 'https://assets.tcgdex.net'],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      frameSrc: ["'none'"],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+}));
 
 // CORS configuration
 const allowedOrigins = process.env.NODE_ENV === 'production'

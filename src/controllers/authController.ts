@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import { LoginBody, GooglePayload, RegisterBody } from '../types/auth';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import User from '../model/user';
 import jwt from 'jsonwebtoken';
 import { ApiResponse } from '../utils/apiResponse';
@@ -66,10 +67,15 @@ export const register = async (req: Request, res: Response) => {
     try {
         const { username, email, password, inGameName, friendCode } = req.body as RegisterBody;
 
-        // Vérifie si l'email est déjà utilisé
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
+        // Vérifie si l'email ou le username est déjà utilisé
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
             return ApiResponse.conflict(res, AUTH_MESSAGES.EMAIL_ALREADY_EXISTS);
+        }
+
+        const existingUsername = await User.findOne({ where: { username } });
+        if (existingUsername) {
+            return ApiResponse.conflict(res, "Ce nom d'utilisateur est déjà pris.");
         }
 
         // Hash du mot de passe et création du compte
@@ -121,7 +127,8 @@ export const googleLogin = async (req: Request, res: Response) => {
         // Crée l'utilisateur si inexistant
         if (!user) {
             // Génère un friendCode et inGameName par défaut pour Google OAuth
-            const friendCode = `${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+            const rand = () => crypto.randomInt(0, 10000).toString().padStart(4, '0');
+            const friendCode = `${rand()}-${rand()}-${rand()}`;
             const inGameName = name.substring(0, 20);
 
             user = await User.create({

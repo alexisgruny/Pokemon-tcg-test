@@ -23,8 +23,9 @@ export const googleAuthLimiter = rateLimit({
 // Limiter général pour l'API
 export const apiLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 heure
-  max: 100, // 100 requêtes par heure par IP
+  max: 500, // 500 requêtes par heure par IP
   message: 'Trop de requêtes. Réessayez dans une heure.',
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (_req) => process.env.NODE_ENV !== 'production',
 });
