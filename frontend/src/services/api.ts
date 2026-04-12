@@ -70,6 +70,18 @@ class ApiService {
     return this.post(API_ROUTES.AUTH.GOOGLE_LOGIN, { idToken });
   }
 
+  async verifyEmail(token: string): Promise<ApiResponse> {
+    return this.get(API_ROUTES.AUTH.VERIFY_EMAIL(token));
+  }
+
+  async forgotPassword(email: string): Promise<ApiResponse> {
+    return this.post(API_ROUTES.AUTH.FORGOT_PASSWORD, { email });
+  }
+
+  async resetPassword(token: string, password: string): Promise<ApiResponse> {
+    return this.post(API_ROUTES.AUTH.RESET_PASSWORD(token), { password });
+  }
+
   /**
    * CARD ENDPOINTS
    */

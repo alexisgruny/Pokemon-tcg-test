@@ -9,6 +9,9 @@ export const API_ROUTES = {
     REGISTER: '/auth/register',
     LOGOUT: '/auth/logout',
     GOOGLE_LOGIN: '/auth/google/login',
+    VERIFY_EMAIL: (token: string) => `/auth/verify/${token}`,
+    FORGOT_PASSWORD: '/auth/forgot-password',
+    RESET_PASSWORD: (token: string) => `/auth/reset-password/${token}`,
   },
   // Cards
   CARDS: {

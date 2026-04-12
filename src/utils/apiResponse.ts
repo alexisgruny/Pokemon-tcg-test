@@ -93,6 +93,13 @@ export class ApiResponse {
   }
 
   /**
+   * Send a 403 Forbidden error
+   */
+  static forbidden(res: Response, error: string): Response {
+    return this.error(res, error, HTTP_STATUS.FORBIDDEN);
+  }
+
+  /**
    * Send a 409 Conflict error
    */
   static conflict(res: Response, error: string): Response {

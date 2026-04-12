@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import User from '../model/user';
 import jwt from 'jsonwebtoken';
+import { sendVerificationEmail, sendPasswordResetEmail } from '../services/emailService';
 import { ApiResponse } from '../utils/apiResponse';
 import { AUTH_MESSAGES } from '../constants/messages';
 import { HTTP_STATUS } from '../constants/api';
@@ -37,6 +38,11 @@ export const login = async (req: Request, res: Response) => {
         // Vérifie existence et mot de passe
         if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
             return ApiResponse.unauthorized(res, AUTH_MESSAGES.INVALID_CREDENTIALS);
+        }
+
+        // Vérifie que l'email est confirmé
+        if (!user.emailVerified) {
+            return ApiResponse.forbidden(res, 'Veuillez vérifier votre adresse email avant de vous connecter.');
         }
 
         // Vérifie la clé secrète JWT
@@ -80,6 +86,8 @@ export const register = async (req: Request, res: Response) => {
 
         // Hash du mot de passe et création du compte
         const hashedPassword = await bcrypt.hash(password, 10);
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        const verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
 
         await User.create({
             username,
@@ -87,12 +95,17 @@ export const register = async (req: Request, res: Response) => {
             password: hashedPassword,
             friendCode,
             inGameName,
+            emailVerified: false,
+            verificationToken,
+            verificationTokenExpiry,
         });
+
+        await sendVerificationEmail(email, verificationToken);
 
         return ApiResponse.success(
             res,
             null,
-            AUTH_MESSAGES.REGISTRATION_SUCCESS,
+            'Inscription réussie ! Vérifiez votre email pour activer votre compte.',
             HTTP_STATUS.CREATED
         );
     } catch (error) {
@@ -138,7 +151,8 @@ export const googleLogin = async (req: Request, res: Response) => {
                 provider: 'google',
                 friendCode,
                 inGameName,
-                password: null, // Google OAuth users don't have passwords
+                password: null,
+                emailVerified: true, // Google accounts are already verified
             });
         }
 
@@ -149,6 +163,77 @@ export const googleLogin = async (req: Request, res: Response) => {
         return ApiResponse.success(res, { token }, AUTH_MESSAGES.LOGIN_SUCCESS);
     } catch (error) {
         console.error("Erreur d'authentification Google:", error);
+        return ApiResponse.internal(res);
+    }
+};
+
+// === Vérification d'email ===
+export const verifyEmail = async (req: Request, res: Response) => {
+    try {
+        const { token } = req.params;
+        const user = await User.findOne({ where: { verificationToken: token } });
+
+        if (!user || !user.verificationTokenExpiry || user.verificationTokenExpiry < new Date()) {
+            return ApiResponse.badRequest(res, 'Lien de vérification invalide ou expiré.');
+        }
+
+        user.emailVerified = true;
+        user.verificationToken = null;
+        user.verificationTokenExpiry = null;
+        await user.save();
+
+        return ApiResponse.success(res, null, 'Email vérifié avec succès ! Vous pouvez maintenant vous connecter.');
+    } catch (error) {
+        console.error('Erreur vérification email:', error);
+        return ApiResponse.internal(res);
+    }
+};
+
+// === Mot de passe oublié ===
+export const forgotPassword = async (req: Request, res: Response) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ where: { email } });
+
+        // Toujours répondre OK pour ne pas divulguer si l'email existe
+        if (!user || !user.emailVerified) {
+            return ApiResponse.success(res, null, 'Si cet email existe, un lien de réinitialisation a été envoyé.');
+        }
+
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1h
+        await user.save();
+
+        await sendPasswordResetEmail(email, resetToken);
+
+        return ApiResponse.success(res, null, 'Si cet email existe, un lien de réinitialisation a été envoyé.');
+    } catch (error) {
+        console.error('Erreur forgot password:', error);
+        return ApiResponse.internal(res);
+    }
+};
+
+// === Réinitialisation du mot de passe ===
+export const resetPassword = async (req: Request, res: Response) => {
+    try {
+        const { token } = req.params;
+        const { password } = req.body;
+
+        const user = await User.findOne({ where: { resetPasswordToken: token } });
+
+        if (!user || !user.resetPasswordTokenExpiry || user.resetPasswordTokenExpiry < new Date()) {
+            return ApiResponse.badRequest(res, 'Lien de réinitialisation invalide ou expiré.');
+        }
+
+        user.password = await bcrypt.hash(password, 10);
+        user.resetPasswordToken = null;
+        user.resetPasswordTokenExpiry = null;
+        await user.save();
+
+        return ApiResponse.success(res, null, 'Mot de passe réinitialisé avec succès !');
+    } catch (error) {
+        console.error('Erreur reset password:', error);
         return ApiResponse.internal(res);
     }
 };

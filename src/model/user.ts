@@ -5,11 +5,16 @@ interface UserAttributes {
   id: number;
   username: string;
   email: string;
-  password?: string | null; 
+  password?: string | null;
   friendCode: string | null;
   inGameName: string | null;
-  googleId?: string;      
-  provider?: 'google' | 'local';     
+  googleId?: string;
+  provider?: 'google' | 'local';
+  emailVerified?: boolean;
+  verificationToken?: string | null;
+  verificationTokenExpiry?: Date | null;
+  resetPasswordToken?: string | null;
+  resetPasswordTokenExpiry?: Date | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -25,6 +30,11 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public inGameName!: string;
     public googleId?: string;
     public provider?: 'google' | 'local';
+    public emailVerified!: boolean;
+    public verificationToken!: string | null;
+    public verificationTokenExpiry!: Date | null;
+    public resetPasswordToken!: string | null;
+    public resetPasswordTokenExpiry!: Date | null;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -85,6 +95,27 @@ User.init(
             type: DataTypes.ENUM('google', 'local'),
             allowNull: true,
             defaultValue: 'local',
+        },
+        emailVerified: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        },
+        verificationToken: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        verificationTokenExpiry: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+        resetPasswordToken: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        resetPasswordTokenExpiry: {
+            type: DataTypes.DATE,
+            allowNull: true,
         },
     },
     {

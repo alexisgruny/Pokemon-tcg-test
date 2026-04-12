@@ -73,6 +73,9 @@ const Login = () => {
         </form>
 
         <p className="poke-link-hint">
+          <Link to="/forgot-password">Mot de passe oublié ?</Link>
+        </p>
+        <p className="poke-link-hint">
           Pas encore de compte ?{' '}
           <Link to="/register">Inscrivez-vous ici</Link>
         </p>

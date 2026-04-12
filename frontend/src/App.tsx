@@ -9,6 +9,9 @@ import Users from './pages/Users';
 import UserProfile from './pages/UserProfile';
 import EditProfile from './pages/EditProfile';
 import SetCards from './pages/SetCards';
+import VerifyEmail from './pages/VerifyEmail';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
         <Route path="/sets/:id" element={<SetCards />} />
         <Route path="/cards" element={<Cards />} />
         <Route path="/cards/:id" element={<CardDetail />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   );
