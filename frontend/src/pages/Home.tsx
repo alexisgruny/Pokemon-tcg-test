@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import apiService from '../services/api';
@@ -9,20 +9,24 @@ interface Card {
   image?: string;
 }
 
-const CARD_WIDTH = 160; // px
-const INTERVAL = 2500; // ms
+const CARD_WIDTH = 160;
+const CARD_GAP = 16;
+const CARD_STEP = CARD_WIDTH + CARD_GAP;
+const INTERVAL = 2500;
 
 const Home = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [index, setIndex] = useState(0);
   const [transitioning, setTransitioning] = useState(true);
+  const [scales, setScales] = useState<number[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     apiService.getRandomCards().then(res => {
       if (res.success && res.data) {
-        // Duplique pour un scroll infini fluide
         setCards([...res.data, ...res.data]);
       }
     });
@@ -36,7 +40,7 @@ const Home = () => {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [cards]);
 
-  // Quand on atteint la moitié (fin du premier set), on reset sans transition
+  // Reset loop
   useEffect(() => {
     const half = cards.length / 2;
     if (index >= half) {
@@ -50,20 +54,47 @@ const Home = () => {
     return undefined;
   }, [index, cards.length]);
 
+  // Compute scale for each card based on distance to viewport center
+  const computeScales = useCallback(() => {
+    if (!trackRef.current || !wrapperRef.current || cards.length === 0) return;
+    const wrapperRect = wrapperRef.current.getBoundingClientRect();
+    const viewCenter = wrapperRect.left + wrapperRect.width / 2;
+    const cardEls = trackRef.current.children;
+    const newScales = Array.from(cardEls).map(el => {
+      const rect = (el as HTMLElement).getBoundingClientRect();
+      const cardCenter = rect.left + rect.width / 2;
+      const dist = Math.abs(viewCenter - cardCenter);
+      // Scale from 1.0 (far) to 1.28 (center) over a range of ~2 card widths
+      const maxDist = CARD_STEP * 2;
+      const t = Math.max(0, 1 - dist / maxDist);
+      return 1 + t * 0.28;
+    });
+    setScales(newScales);
+  }, [cards.length]);
+
+  // Recompute after each index change (after transition ends)
+  useEffect(() => {
+    const id = setTimeout(computeScales, transitioning ? 420 : 0);
+    return () => clearTimeout(id);
+  }, [index, transitioning, computeScales]);
+
+  // Recompute on resize
+  useEffect(() => {
+    window.addEventListener('resize', computeScales);
+    return () => window.removeEventListener('resize', computeScales);
+  }, [computeScales]);
+
   const pause = () => { if (timerRef.current) clearInterval(timerRef.current); };
   const resume = () => {
     timerRef.current = setInterval(() => setIndex(prev => prev + 1), INTERVAL);
   };
 
-  const translateX = -(index * CARD_WIDTH);
+  const translateX = -(index * CARD_STEP);
 
   return (
     <Layout>
       {/* Hero */}
-      <div style={{
-        textAlign: 'center',
-        padding: '3rem 1rem 1.5rem',
-      }}>
+      <div style={{ textAlign: 'center', padding: '3rem 1rem 1.5rem' }}>
         <h1 style={{ fontSize: '2.2rem', color: 'var(--coral)', marginBottom: '0.5rem' }}>
           Pokémon TCG Trade
         </h1>
@@ -87,67 +118,70 @@ const Home = () => {
             Cartes du moment
           </h2>
           <div
-            style={{ overflow: 'hidden', cursor: 'pointer' }}
+            ref={wrapperRef}
+            style={{ overflow: 'hidden', cursor: 'pointer', padding: '20px 0' }}
             onMouseEnter={pause}
             onMouseLeave={resume}
           >
             <div
+              ref={trackRef}
               style={{
                 display: 'flex',
-                gap: '12px',
+                gap: `${CARD_GAP}px`,
                 transform: `translateX(${translateX}px)`,
                 transition: transitioning ? 'transform 0.4s ease' : 'none',
                 width: 'max-content',
+                alignItems: 'center',
               }}
             >
-              {cards.map((card, i) => (
-                <div
-                  key={`${card.id}-${i}`}
-                  onClick={() => navigate(`/cards/${card.id}`)}
-                  title={card.name}
-                  style={{
-                    width: `${CARD_WIDTH - 12}px`,
-                    flexShrink: 0,
-                    background: 'var(--white)',
-                    borderRadius: 'var(--radius)',
-                    border: '2px solid var(--border)',
-                    overflow: 'hidden',
-                    boxShadow: 'var(--shadow-sm)',
-                    transition: 'transform 0.2s, box-shadow 0.2s',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-6px) scale(1.04)';
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = 'var(--shadow-lg)';
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLDivElement).style.transform = '';
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = 'var(--shadow-sm)';
-                  }}
-                >
-                  {card.image ? (
-                    <img
-                      src={`${card.image}/high.webp`}
-                      alt={card.name}
-                      loading="lazy"
-                      style={{ width: '100%', display: 'block' }}
-                      onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                    />
-                  ) : (
-                    <div style={{
-                      height: '200px',
-                      background: 'var(--cream)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'var(--dark-soft)',
-                      fontSize: '0.8rem',
-                    }}>
-                      {card.name}
-                    </div>
-                  )}
-                </div>
-              ))}
+              {cards.map((card, i) => {
+                const scale = scales[i] ?? 1;
+                const opacity = 0.55 + (scale - 1) / 0.28 * 0.45;
+                return (
+                  <div
+                    key={`${card.id}-${i}`}
+                    onClick={() => navigate(`/cards/${card.id}`)}
+                    title={card.name}
+                    style={{
+                      width: `${CARD_WIDTH}px`,
+                      flexShrink: 0,
+                      background: 'var(--white)',
+                      borderRadius: 'var(--radius)',
+                      border: `2px solid var(--border)`,
+                      overflow: 'hidden',
+                      boxShadow: scale > 1.15 ? 'var(--shadow-lg)' : 'var(--shadow-sm)',
+                      transform: `scale(${scale})`,
+                      opacity,
+                      transition: 'transform 0.4s ease, opacity 0.4s ease, box-shadow 0.4s ease',
+                      cursor: 'pointer',
+                      zIndex: Math.round(scale * 10),
+                      position: 'relative',
+                    }}
+                  >
+                    {card.image ? (
+                      <img
+                        src={`${card.image}/high.webp`}
+                        alt={card.name}
+                        loading="lazy"
+                        style={{ width: '100%', display: 'block' }}
+                        onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div style={{
+                        height: '200px',
+                        background: 'var(--cream)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--dark-soft)',
+                        fontSize: '0.8rem',
+                      }}>
+                        {card.name}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
           <p style={{ textAlign: 'center', color: 'var(--dark-soft)', fontSize: '0.8rem', marginTop: '0.75rem' }}>
