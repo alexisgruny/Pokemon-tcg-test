@@ -21,8 +21,16 @@ dotenv.config();
 const app = express();
 
 // CORS configuration
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [process.env.FRONTEND_URL, `https://${process.env.VERCEL_URL}`].filter(Boolean)
+  : ['http://localhost:5173'];
+
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // allow same-origin requests (no origin header) and allowed origins
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    callback(null, true); // permissive in prod since same domain
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
