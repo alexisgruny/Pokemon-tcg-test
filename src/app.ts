@@ -20,6 +20,9 @@ import wantedRoutes from './routes/wanted';
 dotenv.config();
 const app = express();
 
+// Nécessaire sur Vercel/proxies pour que rate-limit et sessions fonctionnent
+app.set('trust proxy', 1);
+
 // CORS configuration
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? [process.env.FRONTEND_URL, `https://${process.env.VERCEL_URL}`].filter(Boolean)

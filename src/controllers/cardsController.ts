@@ -11,9 +11,9 @@ export const getCardsApi = async (_req: Request, res: Response) => {
   try {
     const cards = await Card.findAll();
     return ApiResponse.success(res, cards, 'Cartes récupérées avec succès');
-  } catch (error: any) {
+  } catch (error) {
     console.error('Erreur lors de la récupération des cartes :', error);
-    return res.status(500).json({ success: false, error: error?.message, stack: error?.stack });
+    return ApiResponse.internal(res);
   }
 };
 
