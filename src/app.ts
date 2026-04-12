@@ -24,19 +24,9 @@ const app = express();
 // Nécessaire sur Vercel/proxies pour que rate-limit et sessions fonctionnent
 app.set('trust proxy', 1);
 
-// Security headers
+// Security headers (CSP désactivé — Vite génère des hashes dynamiques incompatibles)
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", 'data:', 'https://assets.tcgdex.net'],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'"],
-      frameSrc: ["'none'"],
-    },
-  },
+  contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
 }));
 
