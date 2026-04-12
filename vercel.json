@@ -1,11 +1,12 @@
 {
   "version": 2,
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
   "functions": {
-    "api/index.ts": {
-      "includeFiles": "frontend/dist/**"
-    }
+    "api/index.ts": {}
   },
   "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index" }
+    { "source": "/api/:path*", "destination": "/api/index" },
+    { "source": "/((?!api).*)", "destination": "/index.html" }
   ]
 }

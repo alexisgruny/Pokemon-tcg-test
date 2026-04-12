@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
-import path from 'path';
 import sessionMiddleware from './config/session';
 import { errorHandler } from './middlewares/errorHandler';
 import { apiLimiter } from './middlewares/rateLimiter';
@@ -66,8 +65,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.static(path.join(process.cwd(), 'frontend/dist')));
-
 // Routes
 app.use('/api/', indexRoutes);
 app.use('/api/auth', authRoutes);
@@ -77,10 +74,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/sets', setRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/wanted', wantedRoutes);
-
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(process.cwd(), 'frontend/dist/index.html'));
-});
 
 // Gestion centralisée des erreurs
 app.use(errorHandler);
