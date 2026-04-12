@@ -16,6 +16,7 @@ const INTERVAL = 2500;
 
 const Home = () => {
   const [cards, setCards] = useState<Card[]>([]);
+  const [failedIds, setFailedIds] = useState<Set<string>>(new Set());
   const [index, setIndex] = useState(0);
   const [transitioning, setTransitioning] = useState(true);
   const [scales, setScales] = useState<number[]>([]);
@@ -27,7 +28,8 @@ const Home = () => {
   useEffect(() => {
     apiService.getRandomCards().then(res => {
       if (res.success && res.data) {
-        setCards([...res.data, ...res.data]);
+        const withImage = res.data.filter((c: Card) => c.image);
+        setCards([...withImage, ...withImage]);
       }
     });
   }, []);
@@ -134,7 +136,7 @@ const Home = () => {
                 alignItems: 'center',
               }}
             >
-              {cards.map((card, i) => {
+              {cards.filter(card => !failedIds.has(card.id)).map((card, i) => {
                 const scale = scales[i] ?? 1;
                 const opacity = 0.55 + (scale - 1) / 0.28 * 0.45;
                 return (
@@ -158,27 +160,13 @@ const Home = () => {
                       position: 'relative',
                     }}
                   >
-                    {card.image ? (
-                      <img
-                        src={`${card.image}/high.webp`}
-                        alt={card.name}
-                        loading="lazy"
-                        style={{ width: '100%', display: 'block' }}
-                        onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                      />
-                    ) : (
-                      <div style={{
-                        height: '200px',
-                        background: 'var(--cream)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'var(--dark-soft)',
-                        fontSize: '0.8rem',
-                      }}>
-                        {card.name}
-                      </div>
-                    )}
+                    <img
+                      src={`${card.image}/high.webp`}
+                      alt={card.name}
+                      loading="lazy"
+                      style={{ width: '100%', display: 'block' }}
+                      onError={() => setFailedIds(prev => new Set(prev).add(card.id))}
+                    />
                   </div>
                 );
               })}

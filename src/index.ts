@@ -10,7 +10,7 @@ async function startServer() {
 
         // sync uniquement en dev pour créer/modifier les tables
         if (process.env.NODE_ENV !== 'production') {
-            await sequelize.sync({ force: false });
+            await sequelize.sync({ alter: true });
         }
 
         app.listen(PORT, () => {
