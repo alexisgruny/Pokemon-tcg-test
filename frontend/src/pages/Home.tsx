@@ -10,7 +10,6 @@ interface Card {
 }
 
 const CARD_WIDTH = 160; // px
-const VISIBLE = 5;
 const INTERVAL = 2500; // ms
 
 const Home = () => {
@@ -46,9 +45,9 @@ const Home = () => {
         setIndex(0);
       }, 400);
       return () => clearTimeout(timeout);
-    } else {
-      setTransitioning(true);
     }
+    setTransitioning(true);
+    return undefined;
   }, [index, cards.length]);
 
   const pause = () => { if (timerRef.current) clearInterval(timerRef.current); };
