@@ -33,8 +33,8 @@ export const validateRegister = [
         .isLength({ min: 3, max: 20 })
         .withMessage('Le pseudo doit contenir entre 3 et 20 caractères.'),
     body('friendCode')
-        .matches(/^\d{4}-\d{4}-\d{4}$/)
-        .withMessage('Le code ami doit être au format: XXXX-XXXX-XXXX'),
+        .matches(/^\d{4}-\d{4}-\d{4}-\d{4}$/)
+        .withMessage('Le code ami doit être au format: XXXX-XXXX-XXXX-XXXX'),
     checkResult,
 ];
 

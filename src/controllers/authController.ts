@@ -141,7 +141,7 @@ export const googleLogin = async (req: Request, res: Response) => {
         if (!user) {
             // Génère un friendCode et inGameName par défaut pour Google OAuth
             const rand = () => crypto.randomInt(0, 10000).toString().padStart(4, '0');
-            const friendCode = `${rand()}-${rand()}-${rand()}`;
+            const friendCode = `${rand()}-${rand()}-${rand()}-${rand()}`;
             const inGameName = name.substring(0, 20);
 
             user = await User.create({

@@ -17,7 +17,13 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    let { name, value } = e.target;
+    if (name === 'friendCode') {
+      // Garde uniquement les chiffres puis formate en XXXX-XXXX-XXXX-XXXX
+      const digits = value.replace(/\D/g, '').slice(0, 16);
+      value = digits.match(/.{1,4}/g)?.join('-') ?? digits;
+    }
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,12 +114,12 @@ const Register = () => {
               type="text"
               id="friendCode"
               name="friendCode"
-              pattern="\d{4}-\d{4}-\d{4}"
+              pattern="\d{4}-\d{4}-\d{4}-\d{4}"
               required
               value={formData.friendCode}
               onChange={handleChange}
               disabled={loading}
-              placeholder="0000-0000-0000"
+              placeholder="0000-0000-0000-0000"
             />
           </div>
           <div className="form-group">
