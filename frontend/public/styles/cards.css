@@ -367,3 +367,45 @@
 .colorless  { background-image: url(../images/energy-types.png); background-position: -25px   0px; width: 25px; height: 25px; }
 
 .hidden { display: none !important; }
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 768px) {
+  .grid-view {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.75rem;
+    padding: 0 0.75rem;
+  }
+
+  .cards-search-bar {
+    padding: 0 0.75rem;
+  }
+
+  .cards-search-clear {
+    right: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-view {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .cards-search-bar {
+    flex-wrap: wrap;
+    padding: 0 0.5rem;
+  }
+
+  .cards-search-count {
+    order: 3;
+    width: 100%;
+    text-align: center;
+  }
+
+  .cards-search-clear {
+    position: static;
+  }
+}
