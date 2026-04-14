@@ -20,6 +20,23 @@ export const getRandomCards = async (_req: Request, res: Response) => {
   }
 };
 
+// === Collection de l'utilisateur connecté ===
+export const getMyCollection = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+    if (!userId) return ApiResponse.unauthorized(res);
+
+    const owned = await OwnedCard.findAll({ where: { userId }, attributes: ['cardId', 'quantity'] });
+    const collection: Record<string, number> = {};
+    owned.forEach(o => { collection[o.cardId] = o.quantity; });
+
+    return ApiResponse.success(res, collection);
+  } catch (error) {
+    console.error('Erreur getMyCollection :', error);
+    return ApiResponse.internal(res);
+  }
+};
+
 // === Affiche toutes les cartes ===
 export const getCardsApi = async (_req: Request, res: Response) => {
   try {

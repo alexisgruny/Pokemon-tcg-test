@@ -89,6 +89,10 @@ class ApiService {
     return this.get(API_ROUTES.CARDS.RANDOM);
   }
 
+  async getMyCollection(): Promise<ApiResponse<Record<string, number>>> {
+    return this.get(API_ROUTES.CARDS.MY_COLLECTION);
+  }
+
   async getCards(): Promise<ApiResponse<any[]>> {
     return this.get(API_ROUTES.CARDS.LIST);
   }

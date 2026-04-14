@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getRandomCards, getCardsApi, showCardDetails, addOrUpdateCard, removeCard, filterAllCards } from '../controllers/cardsController';
+import { getRandomCards, getCardsApi, showCardDetails, addOrUpdateCard, removeCard, filterAllCards, getMyCollection } from '../controllers/cardsController';
 import { isAuthenticated } from '../middlewares/authMiddleware';
 
 const router = Router();
@@ -11,6 +11,7 @@ router.get('/id/:id', showCardDetails);
 router.get('/filter', filterAllCards);
 
 // Routes pour ajouter, modifier et supprimer une carte (authentifiées)
+router.get('/my-collection', isAuthenticated, getMyCollection);
 router.post('/addOrUpdate', isAuthenticated, addOrUpdateCard);
 router.post('/remove', isAuthenticated, removeCard);
 

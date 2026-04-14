@@ -17,6 +17,7 @@ export const API_ROUTES = {
   CARDS: {
     RANDOM: '/cards/random',
     LIST: '/cards/list',
+    MY_COLLECTION: '/cards/my-collection',
     DETAILS: (id: string) => `/cards/id/${id}`,
     ADD_OR_UPDATE: '/cards/addOrUpdate',
     REMOVE: '/cards/remove',
