@@ -26,9 +26,9 @@ export const getMyCollection = async (req: Request, res: Response) => {
     const userId = req.userId;
     if (!userId) return ApiResponse.unauthorized(res);
 
-    const owned = await OwnedCard.findAll({ where: { userId }, attributes: ['cardId', 'quantity'] });
-    const collection: Record<string, number> = {};
-    owned.forEach(o => { collection[o.cardId] = o.quantity; });
+    const owned = await OwnedCard.findAll({ where: { userId }, attributes: ['cardId', 'quantity', 'forTrade'] });
+    const collection: Record<string, { quantity: number; forTrade: boolean }> = {};
+    owned.forEach(o => { collection[o.cardId] = { quantity: o.quantity, forTrade: o.forTrade }; });
 
     return ApiResponse.success(res, collection);
   } catch (error) {
@@ -40,6 +40,7 @@ export const getMyCollection = async (req: Request, res: Response) => {
 // === Affiche toutes les cartes ===
 export const getCardsApi = async (_req: Request, res: Response) => {
   try {
+    res.set('Cache-Control', 'public, max-age=300'); // 5 min
     const cards = await Card.findAll();
     return ApiResponse.success(res, cards, 'Cartes récupérées avec succès');
   } catch (error) {
@@ -93,6 +94,27 @@ export const addOrUpdateCard = async (req: Request, res: Response) => {
         return ApiResponse.success(res, null, message);
     } catch (error) {
         console.error("Erreur add/update carte :", error);
+        return ApiResponse.internal(res);
+    }
+};
+
+// === Basculer le statut "à échanger" ===
+export const toggleTrade = async (req: Request, res: Response) => {
+    try {
+        const { cardId } = req.body;
+        const userId = req.userId;
+        if (!userId) return ApiResponse.unauthorized(res);
+        if (!cardId) return ApiResponse.badRequest(res, CARD_MESSAGES.INVALID_DATA);
+
+        const owned = await OwnedCard.findOne({ where: { userId, cardId } });
+        if (!owned) return ApiResponse.notFound(res, 'Carte non possédée');
+
+        owned.forTrade = !owned.forTrade;
+        await owned.save();
+
+        return ApiResponse.success(res, { forTrade: owned.forTrade });
+    } catch (error) {
+        console.error('Erreur toggleTrade :', error);
         return ApiResponse.internal(res);
     }
 };

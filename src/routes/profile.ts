@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { getProfile, updateProfile, showProfile, showModifyProfile, modifyProfile, showDeleteProfile, deleteProfile, } from '../controllers/profileController';
+import { getProfile, updateProfile, getMyCards, showProfile, showModifyProfile, modifyProfile, showDeleteProfile, deleteProfile, } from '../controllers/profileController';
 import { isAuthenticated } from '../middlewares/authMiddleware';
 
 const router = Router();
 
 // Routes pour l'API JSON
 router.get('/', isAuthenticated, getProfile);
+router.get('/cards', isAuthenticated, getMyCards);
 router.post('/update', isAuthenticated, updateProfile);
 
 // Routes pour le profil (page rendue)

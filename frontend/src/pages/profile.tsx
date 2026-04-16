@@ -29,7 +29,7 @@ const Profile = () => {
       try {
         const [profileRes, colRes] = await Promise.all([
           apiService.getProfile(),
-          apiService.getMyCollection(),
+          apiService.getMyCards(),
         ]);
 
         if (!profileRes.success) {
@@ -39,14 +39,7 @@ const Profile = () => {
         setUser(profileRes.data as User);
 
         if (colRes.success && colRes.data) {
-          const collection = colRes.data as Record<string, number>;
-          const allCardsRes = await apiService.getCards();
-          if (allCardsRes.success && allCardsRes.data) {
-            const owned: OwnedCard[] = allCardsRes.data
-              .filter((c: any) => collection[c.id] !== undefined)
-              .map((c: any) => ({ ...c, quantity: collection[c.id] }));
-            setCards(owned);
-          }
+          setCards(colRes.data as OwnedCard[]);
         }
       } catch (err) {
         console.error(err);

@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import apiService from '../services/api';
+import { cacheGet, cacheSet } from '../utils/cache';
 
 interface Card {
   id: string;
@@ -14,7 +15,7 @@ interface Card {
 
 const Cards = () => {
   const [cards, setCards] = useState<Card[]>([]);
-  const [collection, setCollection] = useState<Record<string, number>>({});
+  const [collection, setCollection] = useState<Record<string, { quantity: number; forTrade: boolean }>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
@@ -23,13 +24,24 @@ const Cards = () => {
   useEffect(() => {
     const fetchAll = async () => {
       try {
+        // Utilise le cache pour la liste des cartes (données statiques)
+        const cached = cacheGet<Card[]>('cards:list');
+        const cardsPromise = cached
+          ? Promise.resolve({ success: true, data: cached })
+          : apiService.getCards();
+
         const [cardsRes, colRes] = await Promise.all([
-          apiService.getCards(),
+          cardsPromise,
           isLoggedIn ? apiService.getMyCollection() : Promise.resolve({ success: false, data: {} }),
         ]);
-        if (cardsRes.success && cardsRes.data) setCards(cardsRes.data);
-        else setError(cardsRes.error || 'Erreur lors du chargement des cartes');
-        if (colRes.success && colRes.data) setCollection(colRes.data);
+
+        if (cardsRes.success && cardsRes.data) {
+          if (!cached) cacheSet('cards:list', cardsRes.data);
+          setCards(cardsRes.data);
+        } else {
+          setError((cardsRes as any).error || 'Erreur lors du chargement des cartes');
+        }
+        if (colRes.success && colRes.data) setCollection(colRes.data as any);
       } catch (err) {
         console.error(err);
         setError('Erreur réseau');
@@ -47,21 +59,21 @@ const Cards = () => {
   }, [cards, search]);
 
   const handleAdd = async (cardId: string) => {
-    const current = collection[cardId] ?? 0;
+    const current = collection[cardId]?.quantity ?? 0;
     const next = current + 1;
-    setCollection(prev => ({ ...prev, [cardId]: next }));
+    setCollection(prev => ({ ...prev, [cardId]: { quantity: next, forTrade: prev[cardId]?.forTrade ?? false } }));
     await apiService.addOrUpdateCard(cardId, next);
   };
 
   const handleRemove = async (cardId: string) => {
-    const current = collection[cardId] ?? 0;
+    const current = collection[cardId]?.quantity ?? 0;
     if (current <= 0) return;
     const next = current - 1;
     if (next === 0) {
       setCollection(prev => { const c = { ...prev }; delete c[cardId]; return c; });
       await apiService.removeCard(cardId);
     } else {
-      setCollection(prev => ({ ...prev, [cardId]: next }));
+      setCollection(prev => ({ ...prev, [cardId]: { quantity: next, forTrade: prev[cardId]?.forTrade ?? false } }));
       await apiService.addOrUpdateCard(cardId, next);
     }
   };
@@ -89,8 +101,10 @@ const Cards = () => {
 
       <ul className="grid-view">
         {filtered.map(card => {
-          const qty = collection[card.id] ?? 0;
+          const entry = collection[card.id];
+          const qty = entry?.quantity ?? 0;
           const owned = qty > 0;
+          const forTrade = entry?.forTrade ?? false;
           return (
             <li key={card.id} className="card-item" style={{ position: 'relative' }}>
               <Link to={`/cards/${card.id}`}>
@@ -100,6 +114,20 @@ const Cards = () => {
                   style={{ filter: owned ? 'none' : 'grayscale(80%) opacity(0.5)', transition: 'filter 0.2s' }}
                 />
               </Link>
+              {forTrade && (
+                <span title="Proposée à l'échange" style={{
+                  position: 'absolute',
+                  top: 6,
+                  left: 6,
+                  background: '#4caf7d',
+                  color: '#fff',
+                  borderRadius: 6,
+                  padding: '2px 6px',
+                  fontSize: '0.65rem',
+                  fontWeight: 'bold',
+                  letterSpacing: '0.04em',
+                }}>ÉCHANGE</span>
+              )}
               {isLoggedIn && (
                 <div style={{
                   position: 'absolute',

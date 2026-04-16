@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import User from '../model/user';
+import OwnedCard from '../model/ownedCard';
+import Card from '../model/card';
 import { ApiResponse } from '../utils/apiResponse';
 
 // API endpoint - Modifier le profil (JSON)
@@ -77,6 +79,33 @@ export const getProfile = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Erreur lors de la récupération du profil :', error);
         return ApiResponse.internal(res, 'Erreur lors de la récupération du profil');
+    }
+};
+
+// API endpoint — Cartes possédées avec détails (JOIN en une requête)
+export const getMyCards = async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).userId;
+        if (!userId) return ApiResponse.unauthorized(res);
+
+        const owned = await OwnedCard.findAll({
+            where: { userId },
+            include: [{ model: Card, as: 'card' }],
+            attributes: ['quantity', 'forTrade'],
+        });
+
+        const cards = owned
+            .filter((o: any) => o.card)
+            .map((o: any) => ({
+                ...o.card.get({ plain: true }),
+                quantity: o.quantity,
+                forTrade: o.forTrade,
+            }));
+
+        return ApiResponse.success(res, cards);
+    } catch (error) {
+        console.error('Erreur getMyCards :', error);
+        return ApiResponse.internal(res);
     }
 };
 

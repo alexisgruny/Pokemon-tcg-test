@@ -89,8 +89,12 @@ class ApiService {
     return this.get(API_ROUTES.CARDS.RANDOM);
   }
 
-  async getMyCollection(): Promise<ApiResponse<Record<string, number>>> {
+  async getMyCollection(): Promise<ApiResponse<Record<string, { quantity: number; forTrade: boolean }>>> {
     return this.get(API_ROUTES.CARDS.MY_COLLECTION);
+  }
+
+  async toggleTrade(cardId: string): Promise<ApiResponse<{ forTrade: boolean }>> {
+    return this.post(API_ROUTES.CARDS.TOGGLE_TRADE, { cardId });
   }
 
   async getCards(): Promise<ApiResponse<any[]>> {
@@ -163,6 +167,10 @@ class ApiService {
    */
   async getProfile(): Promise<ApiResponse> {
     return this.get(API_ROUTES.PROFILE.GET);
+  }
+
+  async getMyCards(): Promise<ApiResponse<any[]>> {
+    return this.get(API_ROUTES.PROFILE.CARDS);
   }
 
   async updateProfile(data: Record<string, any>): Promise<ApiResponse> {

@@ -18,6 +18,7 @@ export const API_ROUTES = {
     RANDOM: '/cards/random',
     LIST: '/cards/list',
     MY_COLLECTION: '/cards/my-collection',
+    TOGGLE_TRADE: '/cards/toggle-trade',
     DETAILS: (id: string) => `/cards/id/${id}`,
     ADD_OR_UPDATE: '/cards/addOrUpdate',
     REMOVE: '/cards/remove',
@@ -44,6 +45,7 @@ export const API_ROUTES = {
   // Profile
   PROFILE: {
     GET: '/profile',
+    CARDS: '/profile/cards',
     UPDATE: '/profile/update',
     DELETE: '/profile/delete',
   },

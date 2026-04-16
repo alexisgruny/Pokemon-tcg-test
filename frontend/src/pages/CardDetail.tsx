@@ -18,7 +18,10 @@ const CardDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isWanted, setIsWanted] = useState(false);
+  const [isOwned, setIsOwned] = useState(false);
+  const [forTrade, setForTrade] = useState(false);
   const [wantedLoading, setWantedLoading] = useState(false);
+  const [tradeLoading, setTradeLoading] = useState(false);
   const [wantedMsg, setWantedMsg] = useState('');
   const isAuthenticated = !!localStorage.getItem('token');
 
@@ -44,13 +47,20 @@ const CardDetail = () => {
 
   useEffect(() => {
     if (!isAuthenticated || !id) return;
-    const checkWanted = async () => {
-      const res = await apiService.getWantedCards();
-      if (res.success && res.data) {
-        setIsWanted(res.data.some((c: Card) => c.id === id));
+    const checkStatus = async () => {
+      const [wantedRes, colRes] = await Promise.all([
+        apiService.getWantedCards(),
+        apiService.getMyCollection(),
+      ]);
+      if (wantedRes.success && wantedRes.data) {
+        setIsWanted(wantedRes.data.some((c: Card) => c.id === id));
+      }
+      if (colRes.success && colRes.data && colRes.data[id]) {
+        setIsOwned(true);
+        setForTrade(colRes.data[id].forTrade);
       }
     };
-    checkWanted();
+    checkStatus();
   }, [id, isAuthenticated]);
 
   const handleWanted = async () => {
@@ -61,7 +71,6 @@ const CardDetail = () => {
       const res = isWanted
         ? await apiService.removeWantedCard(id)
         : await apiService.addWantedCard(id);
-
       if (res.success) {
         setIsWanted(!isWanted);
         setWantedMsg(isWanted ? 'Retirée de ta liste' : 'Ajoutée à ta liste !');
@@ -73,6 +82,23 @@ const CardDetail = () => {
     } finally {
       setWantedLoading(false);
       setTimeout(() => setWantedMsg(''), 3000);
+    }
+  };
+
+  const handleToggleTrade = async () => {
+    if (!id) return;
+    setTradeLoading(true);
+    try {
+      const res = await apiService.toggleTrade(id);
+      if (res.success && res.data) {
+        setForTrade(res.data.forTrade);
+        setWantedMsg(res.data.forTrade ? 'Proposée à l\'échange !' : 'Retirée des échanges');
+        setTimeout(() => setWantedMsg(''), 3000);
+      }
+    } catch {
+      setWantedMsg('Erreur réseau');
+    } finally {
+      setTradeLoading(false);
     }
   };
 
@@ -124,12 +150,17 @@ const CardDetail = () => {
                     onClick={handleWanted}
                     disabled={wantedLoading}
                   >
-                    {wantedLoading
-                      ? '...'
-                      : isWanted
-                      ? '✓ Je la cherche'
-                      : 'Je la cherche'}
+                    {wantedLoading ? '...' : isWanted ? '✓ Je la cherche' : 'Je la cherche'}
                   </button>
+                  {isOwned && (
+                    <button
+                      className={forTrade ? 'trade-button' : 'need-button'}
+                      onClick={handleToggleTrade}
+                      disabled={tradeLoading}
+                    >
+                      {tradeLoading ? '...' : forTrade ? '✓ À l\'échange' : 'Proposer à l\'échange'}
+                    </button>
+                  )}
                 </div>
                 {wantedMsg && <p className="wanted-msg">{wantedMsg}</p>}
               </div>
