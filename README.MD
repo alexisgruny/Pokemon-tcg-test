@@ -1,6 +1,6 @@
 # Pokémon TCG API – Projet Personnel
 
-Ce projet est une API Node.js développée avec TypeScript, connectée à une base de données POSTGRESQL, et intégrant des données externes depuis l’API publique Pokémon TCG.  
+Ce projet est une API Node.js développée avec TypeScript, connectée à une base de données postgreSQL, et intégrant des données externes depuis l’API publique Pokémon TCG.  
 Elle permet de collecter, stocker et manipuler des cartes Pokémon dans une collection personnelle.
 
 ## 🚀 Fonctionnalités
